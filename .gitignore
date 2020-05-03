@@ -4,13 +4,10 @@ bin/*
 .vs/BajanVincyAssembly/v16/Server/sqlite3/storage.ide
 .vs/BajanVincyAssembly/v16/Server/sqlite3/storage.ide-shm
 .vs/BajanVincyAssembly/v16/Server/sqlite3/storage.ide-wal
-obj/Debug/BajanVincyAssembly.csprojAssemblyReference.cache
-obj/Debug/BajanVincyAssembly_MarkupCompile.i.cache
-obj/Debug/BajanVincyAssembly_MarkupCompile.i.lref
-obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
-obj/Debug/MainWindow.g.i.cs
+obj/*
 Properties/AssemblyInfo.cs
 Properties/Resources.Designer.cs
 Properties/Resources.resx
 Properties/Settings.Designer.cs
 Properties/Settings.settings
+packages/*
