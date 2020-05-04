@@ -26,6 +26,6 @@ namespace BajanVincyAssembly.Models.Validation
         /// <summary>
         /// Gets or sets validation messages
         /// </summary>
-        public IEnumerable<string> ValidationMessages { get; set; } = new List<string>();
+        public List<string> ValidationMessages { get; set; } = new List<string>();
     }
 }

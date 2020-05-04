@@ -1,4 +1,5 @@
-﻿using BajanVincyAssembly.Models.ComputerArchitecture;
+﻿using BajanVincyAssembly.Models;
+using BajanVincyAssembly.Models.ComputerArchitecture;
 using BajanVincyAssembly.Models.Validation;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,14 @@ namespace BajanVincyAssembly.Services.Compilers
         /// <inheritdoc cref="ICompile{T}"/>
         public IEnumerable<Instruction> Compile(string code)
         {
-            throw new NotImplementedException();
+            IEnumerable<Instruction> instructions = new List<Instruction>();
+
+            if (this.ValidateCode(code).IsValid)
+            {
+                // Build Instructions from code and return them
+            }
+
+            return instructions;
         }
 
         /// <inheritdoc cref="ICompile{T}"/>
@@ -43,6 +51,12 @@ namespace BajanVincyAssembly.Services.Compilers
             ValidationInfo validationInfo = new ValidationInfo();
 
             IEnumerable<string> linesOfCode = this.GetLinesCodeWithNoComments(code);
+
+            if (linesOfCode.Any())
+            {
+                BVOperationValidationChecks bvOperationValidationChecks = new BVOperationValidationChecks(linesOfCode);
+                validationInfo = bvOperationValidationChecks.ValidationInfo.DeepClone();
+            }
 
             return validationInfo;
         }
