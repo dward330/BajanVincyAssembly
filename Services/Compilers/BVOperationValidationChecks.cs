@@ -1,4 +1,6 @@
-﻿using BajanVincyAssembly.Models.ComputerArchitecture;
+﻿using BajanVincyAssembly.Models;
+using BajanVincyAssembly.Models.ComputerArchitecture;
+using BajanVincyAssembly.Models.Validation;
 using BajanVincyAssembly.Services.Registers;
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BajanVincyAssembly.Models.Validation
+namespace BajanVincyAssembly.Services.Compilers
 {
     /// <summary>
     /// Runs BV Operation Validation Checks
