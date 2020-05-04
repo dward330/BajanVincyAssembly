@@ -207,7 +207,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 }
             }
 
-            return ValidationInfo;
+            return validationInfo;
         }
 
         /// <summary>

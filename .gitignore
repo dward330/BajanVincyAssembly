@@ -5,9 +5,4 @@ bin/*
 .vs/BajanVincyAssembly/v16/Server/sqlite3/storage.ide-shm
 .vs/BajanVincyAssembly/v16/Server/sqlite3/storage.ide-wal
 obj/*
-Properties/AssemblyInfo.cs
-Properties/Resources.Designer.cs
-Properties/Resources.resx
-Properties/Settings.Designer.cs
-Properties/Settings.settings
 packages/*

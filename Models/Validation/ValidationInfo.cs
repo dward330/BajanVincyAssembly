@@ -21,7 +21,7 @@ namespace BajanVincyAssembly.Models.Validation
         /// <summary>
         /// Gets or sets IsValid
         /// </summary>
-        public bool IsValid { get; set; }
+        public bool IsValid { get; set; } = true;
 
         /// <summary>
         /// Gets or sets validation messages
