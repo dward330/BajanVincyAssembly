@@ -1,4 +1,4 @@
-﻿namespace BajanVincyAssembly.Models.Infrastructure
+﻿namespace BajanVincyAssembly.Models.ComputerArchitecture
 {
     /// <summary>
     /// Contains information about a register
@@ -9,9 +9,10 @@
         /// Instantiates a new instance of the <see cref="Register" class/>
         /// </summary>
         /// <param name="name"></param>
-        public Register(string name)
+        public Register(string name, int base10Value = 0)
         {
             this.Name = name;
+            this.Base10Value = base10Value;
         }
 
         public Register()
@@ -33,15 +34,6 @@
         /// Gets or sets Hex Value
         /// </summary>
         public string HexValue { get { return $"0X{string.Format("{0:x8}", this.Base10Value)}"; } }
-
-        /// <summary>
-        /// Sets Base 10 Value
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetBase10Value (int value)
-        {
-            this.Base10Value = value;
-        }
 
         /// <summary>
         /// Clears Register

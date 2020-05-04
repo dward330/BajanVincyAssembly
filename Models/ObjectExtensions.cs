@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BajanVincyAssembly.Models.Infrastructure
+namespace BajanVincyAssembly.Models
 {
     /// <summary>
     /// Collection of extension methods for all objects
