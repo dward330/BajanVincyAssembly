@@ -152,6 +152,84 @@ namespace BajanVincyAssembly.Services.Compilers
                     case BVOperation.COPYERASE:
                         lineOfCode_ValidationInfo = this.RunCopyEraseInstructionValidtionCheck(lineOfCode);
                         break;
+                    case BVOperation.LESSTHEN:
+                        lineOfCode_ValidationInfo = this.RunLessThenInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.LESSTHENPOS:
+                        lineOfCode_ValidationInfo = this.RunLessThenPosInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.LESSTHENCONST:
+                        lineOfCode_ValidationInfo = this.RunLessThenConstInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.LESSTHENEQ:
+                        lineOfCode_ValidationInfo = this.RunLessThenEqInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.LESSTHENEQPOS:
+                        lineOfCode_ValidationInfo = this.RunLessThenEqPosInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.LESSTHENEQCONST:
+                        lineOfCode_ValidationInfo = this.RunLessThenEqConstInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.MORETHEN:
+                        lineOfCode_ValidationInfo = this.RunMoreThenInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.MORETHENPOS:
+                        lineOfCode_ValidationInfo = this.RunMoreThenPosInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.MORETHENCONST:
+                        lineOfCode_ValidationInfo = this.RunMoreThenConstInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.MORETHENEQ:
+                        lineOfCode_ValidationInfo = this.RunMoreThenEqInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.MORETHENEQPOS:
+                        lineOfCode_ValidationInfo = this.RunMoreThenEqPosInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.MORETHENEQCONST:
+                        lineOfCode_ValidationInfo = this.RunMoreThenEqConstInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.XOR:
+                        lineOfCode_ValidationInfo = this.RunXORInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.XORCONST:
+                        lineOfCode_ValidationInfo = this.RunXORConstInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.SAVEADDRESS:
+                        lineOfCode_ValidationInfo = this.RunSaveAddressInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.GOTO:
+                        lineOfCode_ValidationInfo = this.RunGoToInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.EQ:
+                        lineOfCode_ValidationInfo = this.RunEqInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.EQCONST:
+                        lineOfCode_ValidationInfo = this.RunEqConstInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.GOTOEQ:
+                        lineOfCode_ValidationInfo = this.RunGoToEqInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.GOTOEQCONST:
+                        lineOfCode_ValidationInfo = this.RunGoToEqConstInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.GOTONOEQ:
+                        lineOfCode_ValidationInfo = this.RunGoToNoEqInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.GOTONOEQCONST:
+                        lineOfCode_ValidationInfo = this.RunGoToNoEqConstInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.GOTOMORETHAN:
+                        lineOfCode_ValidationInfo = this.RunGoToMoreThenInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.GOTOMORETHANCONST:
+                        lineOfCode_ValidationInfo = this.RunGoToMoreThenConstInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.GOTOLESSTHEN:
+                        lineOfCode_ValidationInfo = this.RunGoToLessThenInstructionValidtionCheck(lineOfCode);
+                        break;
+                    case BVOperation.GOTOLESSTHENCONST:
+                        lineOfCode_ValidationInfo = this.RunGoToLessThenConstInstructionValidtionCheck(lineOfCode);
+                        break;
                 }
 
                 this.UpdateValidationInfo(lineOfCode_ValidationInfo.IsValid, lineOfCode_ValidationInfo.ValidationMessages);
@@ -1271,6 +1349,1156 @@ namespace BajanVincyAssembly.Services.Compilers
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
                 validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for Lessthen
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunLessThenInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "lessthen";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for LessthenPos
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunLessThenPosInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "lessthenpos";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for LessthenConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunLessThenConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "lessthenconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for LessthenEq
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunLessThenEqInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "lesstheneq";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for LessthenEqPos
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunLessThenEqPosInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "lesstheneqpos";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for LessthenEqConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunLessThenEqConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "lesstheneqconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for Morethen
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunMoreThenInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "morethen";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for MoreThenPos
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunMoreThenPosInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "morethenpos";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for MoreThenConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunMoreThenConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "morethenconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for MoreThenEq
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunMoreThenEqInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "moretheneq";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for MoreThenEqPos
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunMoreThenEqPosInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "moretheneqpos";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for MoreThenEqConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunMoreThenEqConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "moretheneqconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for XOR
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunXORInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "xor";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for XORConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunXORConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "xorconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for SaveAddress
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunSaveAddressInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "saveaddress";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 2)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} labelName");
+            }
+
+            int num = 0;
+            if (int.TryParse(operationParts[1], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Number Found (${operationParts[1]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} labelName");
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for GoTo
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "goto";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 2)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[1], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[1]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for Eq
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunEqInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "eq";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for EqConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunEqConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "eqconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for GoToEq
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToEqInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "gotoeq";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for GoToEqConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToEqConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "gotoeqconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for GoToNoEq
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToNoEqInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "gotonoeq";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for GoToNoEqConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToNoEqConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "gotonoeqconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for GoToMorethen
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToMoreThenInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "gotomorethen";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for GoToMoreThenConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToMoreThenConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "gotomorethenconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for GoToLessthen
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToLessThenInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "gotolessthen";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Runs Instruction Validation Check for GoToLessThenConst
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToLessThenConstInstructionValidtionCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "gotolessthenconst";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+            }
+
+            int num = 0;
+            if (!int.TryParse(operationParts[3], out num))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
