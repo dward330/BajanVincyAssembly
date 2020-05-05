@@ -9,10 +9,11 @@
         /// Instantiates a new instance of the <see cref="Register" class/>
         /// </summary>
         /// <param name="name"></param>
-        public Register(string name, int base10Value = 0)
+        public Register(string name, int base10Value = 0, string word = "")
         {
             this.Name = name;
             this.Base10Value = base10Value;
+            this.Word = word;
         }
 
         public Register()
@@ -34,6 +35,11 @@
         /// Gets or sets Hex Value
         /// </summary>
         public string HexValue { get { return $"0X{string.Format("{0:x8}", this.Base10Value)}"; } }
+
+        /// <summary>
+        /// Gets or sets Word
+        /// </summary>
+        public string Word { get; set; }
 
         /// <summary>
         /// Clears Register

@@ -39,7 +39,11 @@ namespace BajanVincyAssembly.Services.Compilers
 
             if (this.ValidateCode(code).IsValid)
             {
+                IEnumerable<string> linesOfCode = this.GetLinesOfCodeWithNoComments(code);
+
                 // Build Instructions from code and return them
+                BVInstructionBuilder bvInstructionBuilder = new BVInstructionBuilder();
+                instructions = linesOfCode.Select(lineOfCode => bvInstructionBuilder.BuildInstruction(lineOfCode));
             }
 
             return instructions;
@@ -50,7 +54,7 @@ namespace BajanVincyAssembly.Services.Compilers
         {
             ValidationInfo validationInfo = new ValidationInfo();
 
-            IEnumerable<string> linesOfCode = this.GetLinesCodeWithNoComments(code);
+            IEnumerable<string> linesOfCode = this.GetLinesOfCodeWithNoComments(code);
 
             if (linesOfCode.Any())
             {
@@ -66,7 +70,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="code">Code</param>
         /// <returns>Collection of strings</returns>
-        private IEnumerable<string> GetLinesCodeWithNoComments(string code)
+        private IEnumerable<string> GetLinesOfCodeWithNoComments(string code)
         {
             IEnumerable<string> linesOfCode = new List<string>();
 

@@ -63,5 +63,10 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         /// Gets or sets Offset
         /// </summary>
         public int Offset { get; set; }
+
+        /// <summary>
+        /// Gets or sets jump label
+        /// </summary>
+        public string JumpLabel { get; set; }
     }
 }

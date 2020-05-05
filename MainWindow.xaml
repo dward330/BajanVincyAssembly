@@ -31,11 +31,11 @@
                         <Setter Property="FontWeight" Value="Bold"></Setter>
                     </Style>
                 </StackPanel.Resources>
-                <Button Background="DarkBlue" Foreground="White" Click="Button_Click_CompileBVAssemblyCode">Compile</Button>
-                <Button Background="Green" Foreground="White">Run All</Button>
-                <Button Background="YellowGreen" Foreground="White">Debug</Button>
-                <Button Background="YellowGreen" Foreground="White">Debug: Next</Button>
-                <Button Background="DarkRed" Foreground="White">Stop</Button>
+                <Button Name="Button_Compile" Background="DarkBlue" Foreground="White" Click="Button_Click_CompileBVAssemblyCode">Compile</Button>
+                <Button Name="Button_RunAll"  Background="Green" Foreground="White" Click="Button_Click_RunAll">Run All</Button>
+                <Button Name="Button_Debug" Background="YellowGreen" Foreground="White" Click="Button_Click_Debug">Debug</Button>
+                <Button Name="Button_DebugNext" Background="YellowGreen" Foreground="White" Click="Button_Click_Debug">Debug: Next</Button>
+                <Button Name="Button_Stop" Background="DarkRed" Foreground="White" Click="Button_Click_Stop">Stop</Button>
             </StackPanel>
             <GroupBox Grid.Row="1" Grid.Column="0" Header="Assembly Code" Margin="10,10,10,10" BorderBrush="Black">
                 <TextBox x:Name="TextBox_Code" Background="White" IsEnabled="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,5,5,5" Padding="5,5,5,5" AcceptsReturn="True"></TextBox>

@@ -62,7 +62,8 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         GOTOMORETHAN = 49,
         GOTOMORETHANCONST = 50,
         GOTOLESSTHEN = 51,
-        GOTOLESSTHENCONST = 52
+        GOTOLESSTHENCONST = 52,
+        JUMPLABEL = 53
     }
 
     /// <summary>

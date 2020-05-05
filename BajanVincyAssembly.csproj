@@ -86,6 +86,7 @@
     <Compile Include="Models\ComputerArchitecture\BVOperation.cs" />
     <Compile Include="Models\ComputerArchitecture\Instruction.cs" />
     <Compile Include="Models\ObjectExtensions.cs" />
+    <Compile Include="Services\Compilers\BVInstructionBuilder.cs" />
     <Compile Include="Services\Compilers\BVOperationValidationChecks.cs" />
     <Compile Include="Models\Validation\ValidationInfo.cs" />
     <Compile Include="Services\Compilers\BVCompiler.cs" />

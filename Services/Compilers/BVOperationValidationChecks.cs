@@ -64,171 +64,175 @@ namespace BajanVincyAssembly.Services.Compilers
                 }
 
                 string operationFound = operationParts[0].Trim().ToLower();
+                bool operationFoundContainsColon = operationFound.Contains(":");
 
-                if (!BVOperationInfo.BVOperationLookup.ContainsKey(operationFound))
+                if (!BVOperationInfo.BVOperationLookup.ContainsKey(operationFound) && !operationFoundContainsColon)
                 {
-                    this.UpdateValidationInfo(false, new List<string>() { $"Invalid Operation Found: -> ${lineOfCode}" });
+                    this.UpdateValidationInfo(false, new List<string>() { $"Invalid Operation Found: -> {lineOfCode}" });
                     continue;
                 }
 
-                BVOperation operation = BVOperationInfo.BVOperationLookup[operationFound];
+                BVOperation operation = operationFoundContainsColon ? BVOperation.JUMPLABEL : BVOperationInfo.BVOperationLookup[operationFound];
 
                 ValidationInfo lineOfCode_ValidationInfo = new ValidationInfo();
 
                 switch (operation)
                 {
                     case BVOperation.ADDNS:
-                        lineOfCode_ValidationInfo = this.RunADDNSInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunADDNSInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.ADDCONST:
-                        lineOfCode_ValidationInfo = this.RunADDConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunADDConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.ADDPOS:
-                        lineOfCode_ValidationInfo = this.RunADDPOSInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunADDPOSInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SUBNS:
-                        lineOfCode_ValidationInfo = this.RunSUBNSInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunSUBNSInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SUBCONST:
-                        lineOfCode_ValidationInfo = this.RunSubConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunSubConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SUBPOS:
-                        lineOfCode_ValidationInfo = this.RunSUBPOSInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunSUBPOSInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LOGICAND:
-                        lineOfCode_ValidationInfo = this.RunLogicAndInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLogicAndInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LOGICANDCOSNT:
-                        lineOfCode_ValidationInfo = this.RunLogicAndConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLogicAndConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LOGICOR:
-                        lineOfCode_ValidationInfo = this.RunLogicOrInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLogicOrInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LOGICORCONST:
-                        lineOfCode_ValidationInfo = this.RunLogicOrConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLogicOrConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SHIFTLEFT:
-                        lineOfCode_ValidationInfo = this.RunShiftLeftInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunShiftLeftInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SHIFTLEFTPOS:
-                        lineOfCode_ValidationInfo = this.RunShiftLeftPosInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunShiftLeftPosInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SHIFTLEFTCONST:
-                        lineOfCode_ValidationInfo = this.RunShiftLeftConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunShiftLeftConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SHIFTRIGHT:
-                        lineOfCode_ValidationInfo = this.RunShiftRightInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunShiftRightInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SHIFTRIGHTPOS:
-                        lineOfCode_ValidationInfo = this.RunShiftRightPosInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunShiftRightPosInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SHIFTRIGHTCONST:
-                        lineOfCode_ValidationInfo = this.RunShiftRightConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunShiftRightConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.FROMEMEM:
-                        lineOfCode_ValidationInfo = this.RunFromMemInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunFromMemInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.FROMMEMCONST:
-                        lineOfCode_ValidationInfo = this.RunFromMemConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunFromMemConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.FROMCONST:
-                        lineOfCode_ValidationInfo = this.RunFromConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunFromConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.TOMEM:
-                        lineOfCode_ValidationInfo = this.RunToMemInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunToMemInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.TOMEMCONST:
-                        lineOfCode_ValidationInfo = this.RunToMemConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunToMemConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.TOCONST:
-                        lineOfCode_ValidationInfo = this.RunToConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunToConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.TOCONSTCONST:
-                        lineOfCode_ValidationInfo = this.RunToConstConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunToConstConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.COPY:
-                        lineOfCode_ValidationInfo = this.RunCopyInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunCopyInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.COPYERASE:
-                        lineOfCode_ValidationInfo = this.RunCopyEraseInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunCopyEraseInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LESSTHEN:
-                        lineOfCode_ValidationInfo = this.RunLessThenInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLessThenInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LESSTHENPOS:
-                        lineOfCode_ValidationInfo = this.RunLessThenPosInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLessThenPosInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LESSTHENCONST:
-                        lineOfCode_ValidationInfo = this.RunLessThenConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLessThenConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LESSTHENEQ:
-                        lineOfCode_ValidationInfo = this.RunLessThenEqInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLessThenEqInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LESSTHENEQPOS:
-                        lineOfCode_ValidationInfo = this.RunLessThenEqPosInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLessThenEqPosInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.LESSTHENEQCONST:
-                        lineOfCode_ValidationInfo = this.RunLessThenEqConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunLessThenEqConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.MORETHEN:
-                        lineOfCode_ValidationInfo = this.RunMoreThenInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunMoreThenInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.MORETHENPOS:
-                        lineOfCode_ValidationInfo = this.RunMoreThenPosInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunMoreThenPosInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.MORETHENCONST:
-                        lineOfCode_ValidationInfo = this.RunMoreThenConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunMoreThenConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.MORETHENEQ:
-                        lineOfCode_ValidationInfo = this.RunMoreThenEqInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunMoreThenEqInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.MORETHENEQPOS:
-                        lineOfCode_ValidationInfo = this.RunMoreThenEqPosInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunMoreThenEqPosInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.MORETHENEQCONST:
-                        lineOfCode_ValidationInfo = this.RunMoreThenEqConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunMoreThenEqConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.XOR:
-                        lineOfCode_ValidationInfo = this.RunXORInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunXORInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.XORCONST:
-                        lineOfCode_ValidationInfo = this.RunXORConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunXORConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.SAVEADDRESS:
-                        lineOfCode_ValidationInfo = this.RunSaveAddressInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunSaveAddressInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTO:
-                        lineOfCode_ValidationInfo = this.RunGoToInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunGoToInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.EQ:
-                        lineOfCode_ValidationInfo = this.RunEqInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunEqInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.EQCONST:
-                        lineOfCode_ValidationInfo = this.RunEqConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunEqConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTOEQ:
-                        lineOfCode_ValidationInfo = this.RunGoToEqInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunGoToEqInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTOEQCONST:
-                        lineOfCode_ValidationInfo = this.RunGoToEqConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunGoToEqConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTONOEQ:
-                        lineOfCode_ValidationInfo = this.RunGoToNoEqInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunGoToNoEqInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTONOEQCONST:
-                        lineOfCode_ValidationInfo = this.RunGoToNoEqConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunGoToNoEqConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTOMORETHAN:
-                        lineOfCode_ValidationInfo = this.RunGoToMoreThenInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunGoToMoreThenInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTOMORETHANCONST:
-                        lineOfCode_ValidationInfo = this.RunGoToMoreThenConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunGoToMoreThenConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTOLESSTHEN:
-                        lineOfCode_ValidationInfo = this.RunGoToLessThenInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunGoToLessThenInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTOLESSTHENCONST:
-                        lineOfCode_ValidationInfo = this.RunGoToLessThenConstInstructionValidtionCheck(lineOfCode);
+                        lineOfCode_ValidationInfo = this.RunGoToLessThenConstInstructionValidationCheck(lineOfCode);
+                        break;
+                    case BVOperation.JUMPLABEL:
+                        lineOfCode_ValidationInfo = this.RunGoToJumpLabelInstructionValidationCheck(lineOfCode);
                         break;
                 }
 
@@ -252,7 +256,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunADDNSInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunADDNSInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "addns";
@@ -270,7 +274,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -293,7 +297,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunADDConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunADDConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "addconst";
@@ -311,7 +315,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -319,7 +323,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -342,7 +346,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunADDPOSInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunADDPOSInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "addpos";
@@ -360,7 +364,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -383,7 +387,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunSUBNSInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunSUBNSInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "subns";
@@ -401,7 +405,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -424,7 +428,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunSubConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunSubConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "subconst";
@@ -442,7 +446,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -450,7 +454,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -473,7 +477,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunSUBPOSInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunSUBPOSInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "subpos";
@@ -491,7 +495,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -514,7 +518,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLogicAndInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLogicAndInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "logicand";
@@ -532,7 +536,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -555,7 +559,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLogicAndConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLogicAndConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "logicandconst";
@@ -573,7 +577,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -581,7 +585,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -604,7 +608,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLogicOrInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLogicOrInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "logicor";
@@ -622,7 +626,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -645,7 +649,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLogicOrConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLogicOrConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "logicorconst";
@@ -663,7 +667,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -671,7 +675,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -694,7 +698,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunShiftLeftInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunShiftLeftInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "shiftleft";
@@ -712,7 +716,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -735,7 +739,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunShiftLeftPosInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunShiftLeftPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "shiftleftpos";
@@ -753,7 +757,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -776,7 +780,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunShiftLeftConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunShiftLeftConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "shiftleftconst";
@@ -794,7 +798,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -802,7 +806,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -825,7 +829,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunShiftRightInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunShiftRightInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "shiftright";
@@ -843,7 +847,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -866,7 +870,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunShiftRightPosInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunShiftRightPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "shiftrightpos";
@@ -884,7 +888,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -907,7 +911,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunShiftRightConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunShiftRightConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "shiftrightconst";
@@ -925,7 +929,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -933,7 +937,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -956,7 +960,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunFromMemInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunFromMemInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "frommem";
@@ -974,7 +978,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -997,7 +1001,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunFromMemConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunFromMemConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "frommemconst";
@@ -1015,7 +1019,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -1023,7 +1027,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -1046,7 +1050,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunFromConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunFromConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "fromconst";
@@ -1064,7 +1068,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 5");
             }
 
             int num = 0;
@@ -1072,7 +1076,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[2]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1] };
@@ -1095,7 +1099,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunToMemInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunToMemInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "tomem";
@@ -1113,7 +1117,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1136,7 +1140,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunToMemConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunToMemConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "tomemconst";
@@ -1154,7 +1158,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, 5, #2");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 5, #2");
             }
 
             int num = 0;
@@ -1162,7 +1166,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[2]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, 5, #2");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 5, #2");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[3] };
@@ -1185,7 +1189,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunToConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunToConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "toconst";
@@ -1203,7 +1207,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -1211,7 +1215,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -1234,7 +1238,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunToConstConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunToConstConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "toconstconst";
@@ -1252,7 +1256,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, 2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 2, 5");
             }
 
             int num = 0;
@@ -1260,13 +1264,13 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[2]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, 2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 2, 5");
             }
             if (!int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, 2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1] };
@@ -1289,7 +1293,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunCopyInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunCopyInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "copy";
@@ -1307,7 +1311,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -1330,7 +1334,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunCopyEraseInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunCopyEraseInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "copyerase";
@@ -1348,7 +1352,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -1371,7 +1375,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLessThenInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "lessthen";
@@ -1389,7 +1393,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1412,7 +1416,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenPosInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLessThenPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "lessthenpos";
@@ -1430,7 +1434,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1453,7 +1457,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLessThenConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "lessthenconst";
@@ -1471,7 +1475,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -1479,7 +1483,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -1502,7 +1506,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenEqInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLessThenEqInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "lesstheneq";
@@ -1520,7 +1524,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1543,7 +1547,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenEqPosInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLessThenEqPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "lesstheneqpos";
@@ -1561,7 +1565,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1584,7 +1588,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenEqConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunLessThenEqConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "lesstheneqconst";
@@ -1602,7 +1606,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -1610,7 +1614,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -1633,7 +1637,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunMoreThenInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "morethen";
@@ -1651,7 +1655,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1674,7 +1678,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenPosInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunMoreThenPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "morethenpos";
@@ -1692,7 +1696,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1715,7 +1719,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunMoreThenConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "morethenconst";
@@ -1733,7 +1737,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -1741,7 +1745,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -1764,7 +1768,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenEqInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunMoreThenEqInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "moretheneq";
@@ -1782,7 +1786,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1805,7 +1809,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenEqPosInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunMoreThenEqPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "moretheneqpos";
@@ -1823,7 +1827,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1846,7 +1850,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenEqConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunMoreThenEqConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "moretheneqconst";
@@ -1864,7 +1868,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -1872,7 +1876,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -1895,7 +1899,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunXORInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunXORInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "xor";
@@ -1913,7 +1917,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -1936,7 +1940,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunXORConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunXORConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "xorconst";
@@ -1954,7 +1958,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -1962,7 +1966,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -1985,7 +1989,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunSaveAddressInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunSaveAddressInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "saveaddress";
@@ -1999,19 +2003,31 @@ namespace BajanVincyAssembly.Services.Compilers
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
             }
 
-            if (operationParts.Length != 2)
+            if (operationParts.Length != 3)
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} labelName");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, labelName");
             }
 
             int num = 0;
-            if (int.TryParse(operationParts[1], out num))
+            if (int.TryParse(operationParts[2], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
-                validationInfo.ValidationMessages.Add($"Number Found (${operationParts[1]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} labelName");
+                validationInfo.ValidationMessages.Add($"Number Found (${operationParts[2]}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} labelName");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[2] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                }
             }
 
             return validationInfo;
@@ -2022,7 +2038,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunGoToInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "goto";
@@ -2040,7 +2056,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1");
             }
 
             int num = 0;
@@ -2048,7 +2064,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[1]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1] };
@@ -2071,7 +2087,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunEqInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunEqInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "eq";
@@ -2089,7 +2105,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -2112,7 +2128,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunEqConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunEqConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "eqconst";
@@ -2130,7 +2146,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -2138,7 +2154,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -2161,7 +2177,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToEqInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunGoToEqInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "gotoeq";
@@ -2179,7 +2195,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -2202,7 +2218,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToEqConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunGoToEqConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "gotoeqconst";
@@ -2220,7 +2236,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -2228,7 +2244,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -2251,7 +2267,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToNoEqInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunGoToNoEqInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "gotonoeq";
@@ -2269,7 +2285,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -2292,7 +2308,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToNoEqConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunGoToNoEqConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "gotonoeqconst";
@@ -2310,7 +2326,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -2318,7 +2334,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -2341,7 +2357,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToMoreThenInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunGoToMoreThenInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "gotomorethen";
@@ -2359,7 +2375,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -2382,7 +2398,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToMoreThenConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunGoToMoreThenConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "gotomorethenconst";
@@ -2400,7 +2416,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -2408,7 +2424,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -2431,7 +2447,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToLessThenInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunGoToLessThenInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "gotolessthen";
@@ -2449,7 +2465,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, #3");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
@@ -2472,7 +2488,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToLessThenConstInstructionValidtionCheck(string lineOfCode)
+        private ValidationInfo RunGoToLessThenConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "gotolessthenconst";
@@ -2490,7 +2506,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             int num = 0;
@@ -2498,7 +2514,7 @@ namespace BajanVincyAssembly.Services.Compilers
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> ${operationName} #1, #2, 5");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, 5");
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2] };
@@ -2516,5 +2532,33 @@ namespace BajanVincyAssembly.Services.Compilers
             return validationInfo;
         }
 
+        /// <summary>
+        /// Runs Instruction Validation Check for JumpLabel
+        /// </summary>
+        /// <param name="lineOfCode">line of code to validate</param>
+        /// <returns>Validation Info</returns>
+        private ValidationInfo RunGoToJumpLabelInstructionValidationCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "labelName";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 1)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName}:");
+            }
+
+            return validationInfo;
+        }
     }
 }
