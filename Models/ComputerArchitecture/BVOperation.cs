@@ -137,5 +137,65 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
             { "gotolessthen", BVOperation.GOTOLESSTHEN },
             { "gotolessthenconst", BVOperation.GOTOLESSTHENCONST }
         };
+
+        /// <summary>
+        /// Gets BV Operation Code Loopkup Dictionary
+        /// </summary>
+        public static readonly Dictionary<BVOperation, string> BVOperationCodeLookup = new Dictionary<BVOperation, string>()
+        {
+            { BVOperation.ADDNS, "000001 " },
+            { BVOperation.ADDCONST, "000010 " },
+            { BVOperation.ADDPOS, "000011 " },
+            { BVOperation.SUBNS, "000100 " },
+            { BVOperation.SUBCONST, "000101 " },
+            { BVOperation.SUBPOS, "000110 " },
+            { BVOperation.LOGICAND, "000111 " },
+            { BVOperation.LOGICANDCOSNT, "001000 " },
+            { BVOperation.LOGICOR, "001001 " },
+            { BVOperation.LOGICORCONST, "001010 " },
+            { BVOperation.SHIFTLEFT, "001011 " },
+            { BVOperation.SHIFTLEFTPOS, "001100 " },
+            { BVOperation.SHIFTLEFTCONST, "001101 " },
+            { BVOperation.SHIFTRIGHT, "001110 " },
+            { BVOperation.SHIFTRIGHTPOS, "001111 " },
+            { BVOperation.SHIFTRIGHTCONST, "010000 " },
+            { BVOperation.FROMEMEM, "010001 " },
+            { BVOperation.FROMMEMCONST, "010010 " },
+            { BVOperation.FROMCONST, "010011 " },
+            { BVOperation.TOMEM, "010100 " },
+            { BVOperation.TOMEMCONST, "010101 " },
+            { BVOperation.TOCONST, "010110 " },
+            { BVOperation.TOCONSTCONST, "010111 " },
+            { BVOperation.COPY, "011000 " },
+            { BVOperation.COPYERASE, "011001 " },
+            { BVOperation.LESSTHEN, "011010 " },
+            { BVOperation.LESSTHENPOS, "011011 " },
+            { BVOperation.LESSTHENCONST, "011100 " },
+            { BVOperation.LESSTHENEQ, "011101 " },
+            { BVOperation.LESSTHENEQPOS, "011110 " },
+            { BVOperation.LESSTHENEQCONST, "011111 " },
+            { BVOperation.MORETHEN, "100000 " },
+            { BVOperation.MORETHENPOS, "100001 " },
+            { BVOperation.MORETHENCONST, "100010 " },
+            { BVOperation.MORETHENEQ, "100011 " },
+            { BVOperation.MORETHENEQPOS, "100100 " },
+            { BVOperation.MORETHENEQCONST, "100101 " },
+            { BVOperation.XOR, "100110 " },
+            { BVOperation.XORCONST, "100111 " },
+            { BVOperation.SAVEADDRESS, "101000 " },
+            { BVOperation.GOTO, "101001 " },
+            { BVOperation.GOTOCONST, "101010 " },
+            { BVOperation.EQ, "101011 " },
+            { BVOperation.EQCONST, "101100 " },
+            { BVOperation.GOTOEQ, "101101 " },
+            { BVOperation.GOTOEQCONST, "101110 " },
+            { BVOperation.GOTONOEQ, "101111 " },
+            { BVOperation.GOTONOEQCONST, "110000 " },
+            { BVOperation.GOTOMORETHAN, "110001 " },
+            { BVOperation.GOTOMORETHANCONST, "110010 " },
+            { BVOperation.GOTOLESSTHEN, "110011 " },
+            { BVOperation.GOTOLESSTHENCONST, "110100 " },
+            { BVOperation.JUMPLABEL, "110101 " }
+        };
     }
 }

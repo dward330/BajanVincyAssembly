@@ -33,6 +33,9 @@ namespace BajanVincyAssembly
 
             DataContext = this;
 
+            this.OuputMessages.Add($"Initializing IDE...");
+            this.UpdateViewOfOuputMessages();
+
             this.Reset();
 
             this.ListViewOfRegisters.ItemsSource = this.Registers;
@@ -62,6 +65,11 @@ namespace BajanVincyAssembly
         /// Instructions loaded in the processor
         /// </summary>
         public ObservableCollection<Instruction> ProcessorInstructions = new ObservableCollection<Instruction>();
+
+        /// <summary>
+        /// Ouput Messages
+        /// </summary>
+        public ObservableCollection<string> OuputMessages = new ObservableCollection<string>();
 
         /// <summary>
         /// Compiles BV Assembly Code
@@ -111,6 +119,9 @@ namespace BajanVincyAssembly
         /// <param name="e"></param>
         public void Button_Click_RunAll(object sender, RoutedEventArgs e)
         {
+            this.OuputMessages.Add($"Running all code...");
+            this.UpdateViewOfOuputMessages();
+
             // Jump onto Main UI Thread
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
@@ -125,6 +136,9 @@ namespace BajanVincyAssembly
             {
                 try
                 {
+                    Instruction nextInstruction = this._Processor.GetNextInstruction();
+                    this.OuputMessages.Add($"Running next Insruction...${Enum.GetName(typeof(BVOperation), nextInstruction.Operation)} -> {nextInstruction.ToString()}");
+                    this.UpdateViewOfOuputMessages();
                     this._Processor.ProcessNextInstruction();
                     this.UpdateLatestSnapshotOfRegistryState();
                 }
@@ -145,6 +159,9 @@ namespace BajanVincyAssembly
                     this.ShowNotificationsWindow(new List<string>() { $"There are Run Time Issues. Check 'Run Time Errors' Tab!" });
                 }
             }
+
+            this.OuputMessages.Add($"Finished Executing all code...");
+            this.UpdateViewOfOuputMessages();
         }
 
         /// <summary>
@@ -166,6 +183,10 @@ namespace BajanVincyAssembly
 
             if (this._Processor.HasAnotherInstructionToProcess())
             {
+                Instruction nextInstruction = this._Processor.GetNextInstruction();
+                this.OuputMessages.Add($"Running next Insruction...${Enum.GetName(typeof(BVOperation), nextInstruction.Operation)} -> {nextInstruction.ToString()}");
+                this.UpdateViewOfOuputMessages();
+
                 try
                 {
                     this._Processor.ProcessNextInstruction();
@@ -213,9 +234,12 @@ namespace BajanVincyAssembly
         {
             this._Processor = new Processor(this.ProcessorInstructions);
             this._Code_ValidationInfo = new ValidationInfo();
+            this.OuputMessages = new ObservableCollection<string>();
+            this.OuputMessages.Add($"Resetting IDE...");
             this.UpdateLatestSnapshotOfRegistryState();
-            this.UpdateViewOfRunTimeErrors(new List<string>() { string.Empty });
             this.UpdateViewOfCompileErrors();
+            this.UpdateViewOfRunTimeErrors(new List<string>() { string.Empty });
+            this.UpdateViewOfOuputMessages();
 
             // Jump onto Main UI Thread
             Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -271,6 +295,16 @@ namespace BajanVincyAssembly
             var runTimeErrorsStr = string.Join($"{string.Join(string.Empty, BVCompiler.LineDelimitter)}", runTimeErrors);
 
             this.TextBlock_RunTimeErrors.Text = runTimeErrorsStr;
+        }
+
+        /// <summary>
+        /// Update View of Output Messages
+        /// </summary>
+        private void UpdateViewOfOuputMessages()
+        {
+            var outputMessages = string.Join($"{string.Join(string.Empty, BVCompiler.LineDelimitter)}", this.OuputMessages);
+
+            this.TextBlock_Ouput.Text = outputMessages;
         }
 
         /// <summary>

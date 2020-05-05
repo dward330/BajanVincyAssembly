@@ -90,9 +90,19 @@ namespace BajanVincyAssembly.Services.Processor
         {
             if (this._Instructions.Any())
             {
-                Instruction instructionToProcess = this._Instructions.Skip(this._ProgramInstructionPointer).Take(1).FirstOrDefault();
+                Instruction instructionToProcess = this.GetNextInstruction();
                 this.RunInstructionThroughPipeline(instructionToProcess);
             }
+        }
+
+        /// <inheritdoc cref="IProcessor"/>
+        public Instruction GetNextInstruction()
+        {
+            Instruction instruction;
+
+            instruction = this._Instructions.Skip(this._ProgramInstructionPointer).Take(1).FirstOrDefault();
+
+            return instruction;
         }
 
         /// <summary>
@@ -475,7 +485,6 @@ namespace BajanVincyAssembly.Services.Processor
                 case BVOperation.GOTOMORETHANCONST:
                 case BVOperation.GOTOLESSTHEN:
                 case BVOperation.GOTOLESSTHENCONST:
-                    this.ProcessNextInstruction();
                     break;
                 default:
                     this._ProgramInstructionPointer++;

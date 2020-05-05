@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BajanVincyAssembly.Services.Registers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,5 +69,14 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         /// Gets or sets jump label
         /// </summary>
         public string JumpLabel { get; set; }
+
+        /// <summary>
+        /// Prints Binary Format of Instruction
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{BVOperationInfo.BVOperationCodeLookup[this.Operation]} | { (!string.IsNullOrEmpty(OperandARegister) ? Registry.registerAddressLookup[OperandARegister] : string.Format("{0:x5}", 0))} | { (!string.IsNullOrEmpty(OperandBRegister) ? Registry.registerAddressLookup[OperandBRegister] : string.Format("{0:x5}", 0))} | { string.Format("{0:x8}", OperandImmediate)}";
+        }
     }
 }

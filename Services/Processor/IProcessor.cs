@@ -34,5 +34,11 @@ namespace BajanVincyAssembly.Services.Processor
         /// Processes the next instruction
         /// </summary>
         void ProcessNextInstruction();
+
+        /// <summary>
+        /// Gets Next Instruction
+        /// </summary>
+        /// <returns></returns>
+        Instruction GetNextInstruction();
     }
 }

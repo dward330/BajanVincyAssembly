@@ -22,6 +22,39 @@ namespace BajanVincyAssembly.Services.Registers
         }
 
         /// <summary>
+        /// Gets or Sets Registers
+        /// </summary>
+        private Dictionary<string, Register> Registers;
+
+        /// <summary>
+        /// Register Address Lookup
+        /// </summary>
+        public static readonly Dictionary<string, string> registerAddressLookup = new Dictionary<string, string>()
+        {
+            { "#temp0", "000001 " },
+            { "#temp1", "000010 " },
+            { "#temp2", "000011 " },
+            { "#temp3", "000100 " },
+            { "#temp4", "000101 " },
+            { "#temp5", "000110 " },
+            { "#temp6", "000111 " },
+            { "#temp7", "001000 " },
+            { "#temp8", "001001 " },
+            { "#temp9", "001010 " },
+            { "#bv0", "001011 " },
+            { "#bv1", "001100 " },
+            { "#bv2", "001101 " },
+            { "#bv3", "001110 " },
+            { "#bv4", "001111 " },
+            { "#bv5", "010000 " },
+            { "#bv6", "010001 " },
+            { "#bv7", "010010 " },
+            { "#bv8", "010011 " },
+            { "#bv9", "010100 " }
+
+        };
+
+        /// <summary>
         /// Builds new Registry Cache
         /// </summary>
         private void BuildRegistry()
@@ -49,11 +82,6 @@ namespace BajanVincyAssembly.Services.Registers
             this.Registers.Add("#bv8", new Register("#bv8"));
             this.Registers.Add("#bv9", new Register("#bv9"));
         }
-
-        /// <summary>
-        /// Gets or Sets Registers
-        /// </summary>
-        private Dictionary<string, Register> Registers;
 
         /// <inheritdoc cref="IRegistry{T}"/>
         public Register ClearRegister(string registerName)
