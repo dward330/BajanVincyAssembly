@@ -242,6 +242,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 case BVOperation.SAVEADDRESS:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.JumpLabel = operationParts[2].Replace(",", "").Trim();
+                    instruction.OperandImmediate = instruction.InstructionAddress;
                     break;
                 case BVOperation.GOTO:
                     instruction.OperandARegister = operationParts[1].Replace(",", "").Trim();

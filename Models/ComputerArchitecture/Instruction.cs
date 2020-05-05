@@ -83,7 +83,7 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{BVOperationInfo.BVOperationCodeLookup[this.Operation]} | { (!string.IsNullOrEmpty(OperandARegister) ? Registry.registerAddressLookup[OperandARegister] : Convert.ToString(0, 2).PadLeft(5, '0'))} | { (!string.IsNullOrEmpty(OperandBRegister) ? Registry.registerAddressLookup[OperandBRegister] : Convert.ToString(0, 2).PadLeft(5, '0'))} | { Convert.ToString(OperandImmediate, 2).PadLeft(16, '0')}";
+            return $"{BVOperationInfo.BVOperationCodeLookup[this.Operation]} | { (!string.IsNullOrEmpty(DestinationRegister) ? Registry.registerAddressLookup[DestinationRegister] : Convert.ToString(0, 2).PadLeft(5, '0'))} | { (!string.IsNullOrEmpty(OperandARegister) ? Registry.registerAddressLookup[OperandARegister] : Convert.ToString(0, 2).PadLeft(5, '0'))} | { (!string.IsNullOrEmpty(OperandBRegister) ? Registry.registerAddressLookup[OperandBRegister] : Convert.ToString(0, 2).PadLeft(5, '0'))} | { Convert.ToString(OperandImmediate, 2).PadLeft(16, '0')}";
         }
     }
 }
