@@ -277,12 +277,12 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
                     break;
-                case BVOperation.GOTOMORETHAN:
+                case BVOperation.GOTOMORETHEN:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.GOTOMORETHANCONST:
+                case BVOperation.GOTOMORETHENCONST:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandImmediate = int.Parse(operationParts[3]);

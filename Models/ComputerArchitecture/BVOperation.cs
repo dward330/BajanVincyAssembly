@@ -59,8 +59,8 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         GOTOEQCONST = 46,
         GOTONOEQ = 47,
         GOTONOEQCONST = 48,
-        GOTOMORETHAN = 49,
-        GOTOMORETHANCONST = 50,
+        GOTOMORETHEN = 49,
+        GOTOMORETHENCONST = 50,
         GOTOLESSTHEN = 51,
         GOTOLESSTHENCONST = 52,
         JUMPLABEL = 53
@@ -132,8 +132,8 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
             { "gotoeqconst", BVOperation.GOTOEQCONST },
             { "gotonoeq", BVOperation.GOTONOEQ },
             { "gotonoeqconst", BVOperation.GOTONOEQCONST },
-            { "gotomorethan", BVOperation.GOTOMORETHAN },
-            { "gotomorethanconst", BVOperation.GOTOMORETHANCONST },
+            { "gotomorethan", BVOperation.GOTOMORETHEN },
+            { "gotomorethanconst", BVOperation.GOTOMORETHENCONST },
             { "gotolessthen", BVOperation.GOTOLESSTHEN },
             { "gotolessthenconst", BVOperation.GOTOLESSTHENCONST }
         };
@@ -191,8 +191,8 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
             { BVOperation.GOTOEQCONST, "101110 " },
             { BVOperation.GOTONOEQ, "101111 " },
             { BVOperation.GOTONOEQCONST, "110000 " },
-            { BVOperation.GOTOMORETHAN, "110001 " },
-            { BVOperation.GOTOMORETHANCONST, "110010 " },
+            { BVOperation.GOTOMORETHEN, "110001 " },
+            { BVOperation.GOTOMORETHENCONST, "110010 " },
             { BVOperation.GOTOLESSTHEN, "110011 " },
             { BVOperation.GOTOLESSTHENCONST, "110100 " },
             { BVOperation.JUMPLABEL, "110101 " }

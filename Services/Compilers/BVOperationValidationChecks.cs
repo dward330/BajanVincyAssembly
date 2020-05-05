@@ -230,10 +230,10 @@ namespace BajanVincyAssembly.Services.Compilers
                     case BVOperation.GOTONOEQCONST:
                         lineOfCode_ValidationInfo = this.RunGoToNoEqConstInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.GOTOMORETHAN:
+                    case BVOperation.GOTOMORETHEN:
                         lineOfCode_ValidationInfo = this.RunGoToMoreThenInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.GOTOMORETHANCONST:
+                    case BVOperation.GOTOMORETHENCONST:
                         lineOfCode_ValidationInfo = this.RunGoToMoreThenConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.GOTOLESSTHEN:

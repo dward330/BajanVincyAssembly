@@ -432,7 +432,7 @@ namespace BajanVincyAssembly.Services.Processor
                         this._ProgramInstructionPointer = instructionCounter + 1;
                     }
                     break;
-                case BVOperation.GOTOMORETHAN:
+                case BVOperation.GOTOMORETHEN:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
@@ -442,7 +442,7 @@ namespace BajanVincyAssembly.Services.Processor
                         this._ProgramInstructionPointer = instructionCounter + 1;
                     }
                     break;
-                case BVOperation.GOTOMORETHANCONST:
+                case BVOperation.GOTOMORETHENCONST:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandIntermediate = instruction.OperandImmediate;
@@ -482,8 +482,8 @@ namespace BajanVincyAssembly.Services.Processor
                 case BVOperation.GOTOEQCONST:
                 case BVOperation.GOTONOEQ:
                 case BVOperation.GOTONOEQCONST:
-                case BVOperation.GOTOMORETHAN:
-                case BVOperation.GOTOMORETHANCONST:
+                case BVOperation.GOTOMORETHEN:
+                case BVOperation.GOTOMORETHENCONST:
                 case BVOperation.GOTOLESSTHEN:
                 case BVOperation.GOTOLESSTHENCONST:
                     break;
