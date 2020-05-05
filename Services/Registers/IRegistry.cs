@@ -5,7 +5,7 @@ namespace BajanVincyAssembly.Services.Registers
     /// <summary>
     /// Interface defintion for register operations
     /// </summary>
-    interface IRegistry<T>
+    public interface IRegistry<T>
     {
         /// <summary>
         /// Indicates if there exists a register with the supplied Name

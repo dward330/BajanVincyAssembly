@@ -369,6 +369,7 @@ namespace BajanVincyAssembly.Services.Processor
                     break;
                 case BVOperation.SAVEADDRESS:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
+                    destinationRegister.Base10Value = instruction.InstructionAddress;
                     destinationRegister.Word = instruction.JumpLabel;
                     this._Registry.SaveRegister(destinationRegister);
                     break;

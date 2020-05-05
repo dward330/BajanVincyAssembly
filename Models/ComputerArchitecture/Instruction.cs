@@ -20,6 +20,13 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
 
         }
 
+        public static int InstructionAddressPointer = 200;
+
+        /// <summary>
+        /// Gets or sets Instruction Address
+        /// </summary>
+        public int InstructionAddress { get; set; } = InstructionAddressPointer;
+
         /// <summary>
         /// Gets or sets BV Operation
         /// </summary>
@@ -76,7 +83,7 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{BVOperationInfo.BVOperationCodeLookup[this.Operation]} | { (!string.IsNullOrEmpty(OperandARegister) ? Registry.registerAddressLookup[OperandARegister] : string.Format("{0:x5}", 0))} | { (!string.IsNullOrEmpty(OperandBRegister) ? Registry.registerAddressLookup[OperandBRegister] : string.Format("{0:x5}", 0))} | { string.Format("{0:x8}", OperandImmediate)}";
+            return $"{BVOperationInfo.BVOperationCodeLookup[this.Operation]} | { (!string.IsNullOrEmpty(OperandARegister) ? Registry.registerAddressLookup[OperandARegister] : Convert.ToString(0, 2).PadLeft(5, '0'))} | { (!string.IsNullOrEmpty(OperandBRegister) ? Registry.registerAddressLookup[OperandBRegister] : Convert.ToString(0, 2).PadLeft(5, '0'))} | { Convert.ToString(OperandImmediate, 2).PadLeft(16, '0')}";
         }
     }
 }

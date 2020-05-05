@@ -24,6 +24,7 @@ namespace BajanVincyAssembly.Services.Compilers
         /// <returns></returns>
         public Instruction BuildInstruction(string lineOfCode)
         {
+            Instruction.InstructionAddressPointer += 32;
             Instruction instruction = new Instruction();
 
             string[] operationPartsSplitter = { " " };
