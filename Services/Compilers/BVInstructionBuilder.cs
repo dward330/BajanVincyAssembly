@@ -35,13 +35,14 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             string operationFound = operationParts[0].Trim().ToLower();
+            bool jumpLabelFound = BVOperationValidationChecks.JumpLabelregex.Match(operationFound).Success;
 
-            if (!BVOperationInfo.BVOperationLookup.ContainsKey(operationFound))
+            if (!jumpLabelFound && !BVOperationInfo.BVOperationLookup.ContainsKey(operationFound))
             {
                 throw new Exception( $"Invalid Operation Found: -> ${lineOfCode}");
             }
 
-            BVOperation operation = BVOperationInfo.BVOperationLookup[operationFound];
+            BVOperation operation = jumpLabelFound ? BVOperation.JUMPLABEL : BVOperationInfo.BVOperationLookup[operationFound];
 
             instruction.Operation = operation;
 

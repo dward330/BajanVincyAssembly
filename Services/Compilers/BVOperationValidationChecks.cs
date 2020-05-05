@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BajanVincyAssembly.Services.Compilers
@@ -37,6 +38,16 @@ namespace BajanVincyAssembly.Services.Compilers
         private readonly IRegistry<Register> _Registry = new Registry();
 
         /// <summary>
+        /// Jump Label Regex
+        /// </summary>
+        public static readonly Regex JumpLabelregex = new Regex(@"[a-zA-Z0-9]+:");
+
+        /// <summary>
+        /// Letters Only Regex
+        /// </summary>
+        public static readonly Regex LettersOnlyregex = new Regex(@"[a-zA-Z0-9]+");
+
+        /// <summary>
         /// Validation Info for all lines of code
         /// </summary>
         public ValidationInfo ValidationInfo { get; private set; } = new ValidationInfo();
@@ -64,15 +75,15 @@ namespace BajanVincyAssembly.Services.Compilers
                 }
 
                 string operationFound = operationParts[0].Trim().ToLower();
-                bool operationFoundContainsColon = operationFound.Contains(":");
+                bool jumpLabelFound = JumpLabelregex.Match(operationFound).Success;
 
-                if (!BVOperationInfo.BVOperationLookup.ContainsKey(operationFound) && !operationFoundContainsColon)
+                if (!BVOperationInfo.BVOperationLookup.ContainsKey(operationFound) && !jumpLabelFound)
                 {
                     this.UpdateValidationInfo(false, new List<string>() { $"Invalid Operation Found: -> {lineOfCode}" });
                     continue;
                 }
 
-                BVOperation operation = operationFoundContainsColon ? BVOperation.JUMPLABEL : BVOperationInfo.BVOperationLookup[operationFound];
+                BVOperation operation = jumpLabelFound ? BVOperation.JUMPLABEL : BVOperationInfo.BVOperationLookup[operationFound];
 
                 ValidationInfo lineOfCode_ValidationInfo = new ValidationInfo();
 
@@ -319,7 +330,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -450,7 +461,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -581,7 +592,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -671,7 +682,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -802,7 +813,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -933,7 +944,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -1023,7 +1034,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -1072,7 +1083,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[2], out num))
+            if (operationParts.Length >= 3 && !int.TryParse(operationParts[2], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[2]}): -> ${lineOfCode}");
@@ -1162,7 +1173,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[2], out num))
+            if (operationParts.Length >= 3 && !int.TryParse(operationParts[2], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[2]}): -> ${lineOfCode}");
@@ -1211,7 +1222,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -1260,13 +1271,13 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[2], out num))
+            if (operationParts.Length >= 3 && !int.TryParse(operationParts[2], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[2]}): -> ${lineOfCode}");
                 validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 2, 5");
             }
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -1479,7 +1490,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -1610,7 +1621,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -1741,7 +1752,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -1872,7 +1883,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -1962,7 +1973,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -2011,14 +2022,22 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (int.TryParse(operationParts[2], out num))
+            if (operationParts.Length >= 3 && int.TryParse(operationParts[2], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Number Found (${operationParts[2]}): -> ${lineOfCode}");
-                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} labelName");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, labelName");
             }
 
-            var operationOperandPartsRaw = new List<string> { operationParts[2] };
+            var jumpLabelRegexValidation = LettersOnlyregex.Match(operationParts[0]);
+            if (!jumpLabelRegexValidation.Success)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Jump Label Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, labelName");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1] };
             var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
 
             foreach (string operationOperandPart in operationOperandParts)
@@ -2060,7 +2079,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[1], out num))
+            if (operationParts.Length >= 2 && !int.TryParse(operationParts[1], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[1]}): -> ${lineOfCode}");
@@ -2150,7 +2169,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -2240,7 +2259,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -2330,7 +2349,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -2420,7 +2439,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -2510,7 +2529,7 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             int num = 0;
-            if (!int.TryParse(operationParts[3], out num))
+            if (operationParts.Length >= 4 && !int.TryParse(operationParts[3], out num))
             {
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Non-Number Found (${operationParts[3]}): -> ${lineOfCode}");
@@ -2540,7 +2559,7 @@ namespace BajanVincyAssembly.Services.Compilers
         private ValidationInfo RunGoToJumpLabelInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "labelName";
+            const string operationName = "labelName:";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -2556,6 +2575,14 @@ namespace BajanVincyAssembly.Services.Compilers
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
                 validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName}:");
+            }
+
+            var jumpLabelRegexValidation = LettersOnlyregex.Match(operationParts[0]);
+            if (!jumpLabelRegexValidation.Success)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Jump Label Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName}");
             }
 
             return validationInfo;

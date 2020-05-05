@@ -54,7 +54,8 @@ namespace BajanVincyAssembly.Services.Processor
         /// <returns>integer</returns>
         private int FindIndexOfJumpLabelInstruction(string jumpLabel)
         {
-            int instructionCounter = this._Instructions.ToList().FindIndex((instruct) => string.Equals(instruct.JumpLabel, jumpLabel, StringComparison.InvariantCultureIgnoreCase));
+            int instructionCounter = this._Instructions.ToList().FindIndex((instruct) => instruct.Operation == BVOperation.JUMPLABEL 
+                                                                                         && string.Equals(instruct.JumpLabel, jumpLabel, StringComparison.InvariantCultureIgnoreCase));
 
             if (instructionCounter == -1)
             {
@@ -133,21 +134,21 @@ namespace BajanVincyAssembly.Services.Processor
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
-                    destinationRegister.Base10Value = operandARegister.Base10Value + operandBRegister.Base10Value;
+                    destinationRegister.Base10Value = operandARegister.Base10Value - operandBRegister.Base10Value;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
                 case BVOperation.SUBCONST:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandIntermediate = instruction.OperandImmediate;
-                    destinationRegister.Base10Value = operandARegister.Base10Value + operandIntermediate;
+                    destinationRegister.Base10Value = operandARegister.Base10Value - operandIntermediate;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
                 case BVOperation.SUBPOS:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
-                    destinationRegister.Base10Value = operandARegister.Base10Value + operandBRegister.Base10Value;
+                    destinationRegister.Base10Value = operandARegister.Base10Value - operandBRegister.Base10Value;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
                 case BVOperation.LOGICAND:
@@ -474,6 +475,7 @@ namespace BajanVincyAssembly.Services.Processor
                 case BVOperation.GOTOMORETHANCONST:
                 case BVOperation.GOTOLESSTHEN:
                 case BVOperation.GOTOLESSTHENCONST:
+                    this.ProcessNextInstruction();
                     break;
                 default:
                     this._ProgramInstructionPointer++;
