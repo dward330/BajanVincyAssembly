@@ -251,27 +251,35 @@ namespace BajanVincyAssembly.Services.Compilers
                         lineOfCode_ValidationInfo = this.RunGoToJumpLabelInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.MIPSADD:
+                        lineOfCode_ValidationInfo = this.RunMipsAddInstructionValidationCheck(lineOfCode);
                         if (BVOperationInfo.MipsOperations.Exists(x => x == operation))
                         {
-                            lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSADD" } };
+                            lineOfCode_ValidationInfo.IsValid = false;
+                            lineOfCode_ValidationInfo.ValidationMessages.Add($"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSADD");
                         }
                         break;
                     case BVOperation.MIPSSUB:
+                        lineOfCode_ValidationInfo = this.RunMipsSubInstructionValidationCheck(lineOfCode);
                         if (BVOperationInfo.MipsOperations.Exists(x => x == operation))
                         {
-                            lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSUB" } };
+                            lineOfCode_ValidationInfo.IsValid = false;
+                            lineOfCode_ValidationInfo.ValidationMessages.Add($"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSUB");
                         }
                         break;
                     case BVOperation.MIPSLW:
+                        lineOfCode_ValidationInfo = this.RunMipsLWInstructionValidationCheck(lineOfCode);
                         if (BVOperationInfo.MipsOperations.Exists(x => x == operation))
                         {
-                            lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSLW" } };
+                            lineOfCode_ValidationInfo.IsValid = false;
+                            lineOfCode_ValidationInfo.ValidationMessages.Add($"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSLW");
                         }
                         break;
                     case BVOperation.MIPSSW:
+                        lineOfCode_ValidationInfo = this.RunMipsSWInstructionValidationCheck(lineOfCode);
                         if (BVOperationInfo.MipsOperations.Exists(x => x == operation))
                         {
-                            lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSW" } };
+                            lineOfCode_ValidationInfo.IsValid = false;
+                            lineOfCode_ValidationInfo.ValidationMessages.Add($"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSW");
                         }
                         break;
                 }
@@ -289,6 +297,47 @@ namespace BajanVincyAssembly.Services.Compilers
         {
             this.ValidationInfo.IsValid = this.ValidationInfo.IsValid && isValid;
             this.ValidationInfo.ValidationMessages.AddRange(validationMessage);
+        }
+
+        /// <summary>
+        /// Run Instruction Validation Check for Mips Add
+        /// </summary>
+        /// <param name="lineOfCode"></param>
+        /// <returns></returns>
+        private ValidationInfo RunMipsAddInstructionValidationCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "add";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
         }
 
         /// <summary>
@@ -390,6 +439,47 @@ namespace BajanVincyAssembly.Services.Compilers
         {
             ValidationInfo validationInfo = new ValidationInfo();
             const string operationName = "addpos";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 4)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Run Instruction Validation Check for Mips Sub
+        /// </summary>
+        /// <param name="lineOfCode"></param>
+        /// <returns></returns>
+        private ValidationInfo RunMipsSubInstructionValidationCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "sub";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -2612,6 +2702,112 @@ namespace BajanVincyAssembly.Services.Compilers
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Jump Label Format Found: -> ${lineOfCode}");
                 validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName}");
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Run Instruction Validation Check for Mips LW
+        /// </summary>
+        /// <param name="lineOfCode"></param>
+        /// <returns></returns>
+        private ValidationInfo RunMipsLWInstructionValidationCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "lw";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 3)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 0(#3)");
+            }
+
+            string secondOperationPart = operationParts[2].Replace(",", "").Trim();
+            int indexOfFirstParenthesis = secondOperationPart.IndexOf("(");
+            int indexOfSecondParenthesis = secondOperationPart.IndexOf(")");
+            string operandARegister = secondOperationPart.Substring(indexOfFirstParenthesis + 1, (indexOfSecondParenthesis - indexOfFirstParenthesis - 1)).Trim();
+            int offset;
+            if (!int.TryParse(secondOperationPart.Substring(0, indexOfFirstParenthesis).Trim(), out offset))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Offset Value Found ({secondOperationPart.Substring(0, indexOfFirstParenthesis).Trim()}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 0(#3)");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operandARegister };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
+                }
+            }
+
+            return validationInfo;
+        }
+
+        /// <summary>
+        /// Run Instruction Validation Check for Mips SW
+        /// </summary>
+        /// <param name="lineOfCode"></param>
+        /// <returns></returns>
+        private ValidationInfo RunMipsSWInstructionValidationCheck(string lineOfCode)
+        {
+            ValidationInfo validationInfo = new ValidationInfo();
+            const string operationName = "sw";
+
+            string[] operationPartsSplitter = { " " };
+            var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!operationParts.Any())
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Found (No Operation Parts Found): -> ${lineOfCode}");
+            }
+
+            if (operationParts.Length != 3)
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 0(#3)");
+            }
+
+            string secondOperationPart = operationParts[2].Replace(",", "").Trim();
+            int indexOfFirstParenthesis = secondOperationPart.IndexOf("(");
+            int indexOfSecondParenthesis = secondOperationPart.IndexOf(")");
+            string operandARegister = secondOperationPart.Substring(indexOfFirstParenthesis + 1, (indexOfSecondParenthesis - indexOfFirstParenthesis - 1)).Trim();
+            int offset;
+            if (!int.TryParse(secondOperationPart.Substring(0, indexOfFirstParenthesis).Trim(), out offset))
+            {
+                validationInfo.IsValid = validationInfo.IsValid && false;
+                validationInfo.ValidationMessages.Add($"Invalid Offset Value Found ({secondOperationPart.Substring(0, indexOfFirstParenthesis).Trim()}): -> ${lineOfCode}");
+                validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, 0(#3)");
+            }
+
+            var operationOperandPartsRaw = new List<string> { operationParts[1], operandARegister };
+            var operationOperandParts = operationOperandPartsRaw.Select(part => part.Replace(",", "").Trim());
+
+            foreach (string operationOperandPart in operationOperandParts)
+            {
+                if (!this._Registry.Exists(operationOperandPart))
+                {
+                    validationInfo.IsValid = validationInfo.IsValid && false;
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
+                }
             }
 
             return validationInfo;
