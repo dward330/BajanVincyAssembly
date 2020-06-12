@@ -48,6 +48,11 @@ namespace BajanVincyAssembly.Services.Compilers
         public static readonly Regex LettersOnlyregex = new Regex(@"[a-zA-Z0-9]+");
 
         /// <summary>
+        /// Mips Instruction Detection Message Prefix
+        /// </summary>
+        public static readonly string MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX = "Mips Instruction Detected";
+
+        /// <summary>
         /// Validation Info for all lines of code
         /// </summary>
         public ValidationInfo ValidationInfo { get; private set; } = new ValidationInfo();
@@ -244,6 +249,18 @@ namespace BajanVincyAssembly.Services.Compilers
                         break;
                     case BVOperation.JUMPLABEL:
                         lineOfCode_ValidationInfo = this.RunGoToJumpLabelInstructionValidationCheck(lineOfCode);
+                        break;
+                    case BVOperation.MIPSADD:
+                        lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSADD" } };
+                        break;
+                    case BVOperation.MIPSSUB:
+                        lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSUB" } };
+                        break;
+                    case BVOperation.MIPSLW:
+                        lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSLW" } };
+                        break;
+                    case BVOperation.MIPSSW:
+                        lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSW" } };
                         break;
                 }
 

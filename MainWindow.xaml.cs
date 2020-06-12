@@ -107,6 +107,8 @@ namespace BajanVincyAssembly
                         this.Button_Debug.IsEnabled = true;
                         this.Button_DebugNext.IsEnabled = true;
                         this.Button_Stop.IsEnabled = true;
+                        this.Button_RunMipsAnalysis_NoForward.IsEnabled = true;
+                        this.Button_RunMipsAnalysis_Forward.IsEnabled = true;
                     }));
                 }
             }
@@ -129,6 +131,8 @@ namespace BajanVincyAssembly
                 this.Button_RunAll.IsEnabled = false;
                 this.Button_Debug.IsEnabled = false;
                 this.Button_DebugNext.IsEnabled = false;
+                this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
                 this.Button_Stop.IsEnabled = true;
             }));
 
@@ -153,6 +157,8 @@ namespace BajanVincyAssembly
                         this.Button_RunAll.IsEnabled = false;
                         this.Button_Debug.IsEnabled = false;
                         this.Button_DebugNext.IsEnabled = false;
+                        this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                        this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
                         this.Button_Stop.IsEnabled = false;
                     }));
 
@@ -177,6 +183,8 @@ namespace BajanVincyAssembly
                 this.Button_Compile.IsEnabled = false;
                 this.Button_RunAll.IsEnabled = false;
                 this.Button_Debug.IsEnabled = false;
+                this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
                 this.Button_DebugNext.IsEnabled = true;
                 this.Button_Stop.IsEnabled = true;
             }));
@@ -204,6 +212,8 @@ namespace BajanVincyAssembly
                         this.Button_Debug.IsEnabled = false;
                         this.Button_DebugNext.IsEnabled = false;
                         this.Button_Stop.IsEnabled = false;
+                        this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                        this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
                     }));
 
                     this.ShowNotificationsWindow(new List<string>() { $"There are Run Time Issues. Check 'Run Time Errors' Tab!" });
@@ -249,6 +259,8 @@ namespace BajanVincyAssembly
                 this.Button_Debug.IsEnabled = false;
                 this.Button_DebugNext.IsEnabled = false;
                 this.Button_Stop.IsEnabled = false;
+                this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
             }));
         }
 

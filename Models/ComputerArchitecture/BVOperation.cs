@@ -63,7 +63,11 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         GOTOMORETHENCONST = 50,
         GOTOLESSTHEN = 51,
         GOTOLESSTHENCONST = 52,
-        JUMPLABEL = 53
+        JUMPLABEL = 53,
+        MIPSADD = 54, 
+        MIPSSUB = 55,
+        MIPSLW = 56, 
+        MIPSSW = 57
     }
 
     /// <summary>
@@ -135,7 +139,11 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
             { "gotomorethan", BVOperation.GOTOMORETHEN },
             { "gotomorethanconst", BVOperation.GOTOMORETHENCONST },
             { "gotolessthen", BVOperation.GOTOLESSTHEN },
-            { "gotolessthenconst", BVOperation.GOTOLESSTHENCONST }
+            { "gotolessthenconst", BVOperation.GOTOLESSTHENCONST },
+            { "add", BVOperation.MIPSADD },
+            { "sub", BVOperation.MIPSSUB },
+            { "lw", BVOperation.MIPSLW },
+            { "sw", BVOperation.MIPSSW }
         };
 
         /// <summary>
@@ -195,7 +203,16 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
             { BVOperation.GOTOMORETHENCONST, "110010 " },
             { BVOperation.GOTOLESSTHEN, "110011 " },
             { BVOperation.GOTOLESSTHENCONST, "110100 " },
-            { BVOperation.JUMPLABEL, "110101 " }
+            { BVOperation.JUMPLABEL, "110101 " },
+            { BVOperation.MIPSADD, "110110" },
+            { BVOperation.MIPSSUB, "110111" },
+            { BVOperation.MIPSLW, "111000" },
+            { BVOperation.MIPSSW, "111001" }
         };
+
+        /// <summary>
+        /// Collection of Mips Operation Codes
+        /// </summary>
+        public List<BVOperation> MipsOperations { get; } = new List<BVOperation>() { BVOperation.MIPSADD, BVOperation.MIPSSUB, BVOperation.MIPSLW, BVOperation.MIPSSW };
     }
 }

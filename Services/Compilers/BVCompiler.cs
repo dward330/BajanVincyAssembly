@@ -36,14 +36,23 @@ namespace BajanVincyAssembly.Services.Compilers
         public IEnumerable<Instruction> Compile(string code)
         {
             IEnumerable<Instruction> instructions = new List<Instruction>();
+            ValidationInfo codeValidationInfo = this.ValidateCode(code);
 
-            if (this.ValidateCode(code).IsValid)
+            if (codeValidationInfo.IsValid)
             {
                 IEnumerable<string> linesOfCode = this.GetLinesOfCodeWithNoComments(code);
 
                 // Build Instructions from code and return them
                 BVInstructionBuilder bvInstructionBuilder = new BVInstructionBuilder();
                 instructions = linesOfCode.Select(lineOfCode => bvInstructionBuilder.BuildInstruction(lineOfCode));
+            }
+            else if (this.OnlyValidationMessagesAreMipsCodeDetections(codeValidationInfo))
+            {
+                IEnumerable<string> linesOfCode = this.GetLinesOfCodeWithNoComments(code);
+
+                // Build Instructions from code and return them
+                BVInstructionBuilder bvInstructionBuilder = new BVInstructionBuilder();
+                instructions = linesOfCode.Select(lineOfCode => bvInstructionBuilder.BuildInstruction(lineOfCode, true));
             }
 
             return instructions;
@@ -108,6 +117,31 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             return linesOfCode;
+        }
+
+        /// <summary>
+        /// Indicates if the only validation messages are mips detection messages
+        /// </summary>
+        /// <param name="validationInfo"> Validation Info </param>
+        /// <returns>bool</returns>
+        private bool OnlyValidationMessagesAreMipsCodeDetections(ValidationInfo validationInfo)
+        {
+            bool mipsDetectionMessageExist = false;
+            bool nonMipsValidationMessagesExist = false;
+
+            foreach (string validationMessage in  validationInfo?.ValidationMessages)
+            {
+                if (validationMessage.Contains(BVOperationValidationChecks.MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX))
+                {
+                    mipsDetectionMessageExist = true;
+                }
+                else
+                {
+                    nonMipsValidationMessagesExist = true;
+                }
+            }
+
+            return mipsDetectionMessageExist && !nonMipsValidationMessagesExist;
         }
     }
 }
