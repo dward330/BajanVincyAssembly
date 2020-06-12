@@ -85,9 +85,32 @@ namespace BajanVincyAssembly
 
             this.UpdateViewOfCompileErrors();
 
-            if (!this._Code_ValidationInfo.IsValid)
+            if (!this._Code_ValidationInfo.IsValid && !BVOperationValidationChecks.OnlyValidationMessagesAreMipsCodeDetections(this._Code_ValidationInfo))
             {
                 this.ShowNotificationsWindow(new List<string>() { $"There are compile Issues. Check 'Compile Errors' Tab!" });
+            }
+            else if (BVOperationValidationChecks.OnlyValidationMessagesAreMipsCodeDetections(this._Code_ValidationInfo))
+            {
+                // Generate/Build Instructions
+                IEnumerable<Instruction> compiledInstructions = this._BVCompiler.Compile(rawCode);
+                this._Processor = new Processor(compiledInstructions);
+
+                this.UpdateLatestSnapshotOfProcessorInstructions();
+
+                if (this.ProcessorInstructions.Any())
+                {
+                    // Jump onto Main UI Thread
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        this.Button_Compile.IsEnabled = false;
+                        this.Button_RunAll.IsEnabled = false;
+                        this.Button_Debug.IsEnabled = false;
+                        this.Button_DebugNext.IsEnabled = false;
+                        this.Button_Stop.IsEnabled = true;
+                        this.Button_RunMipsAnalysis_NoForward.IsEnabled = true;
+                        this.Button_RunMipsAnalysis_Forward.IsEnabled = true;
+                    }));
+                }
             }
             else
             {

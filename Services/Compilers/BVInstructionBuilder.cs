@@ -312,22 +312,28 @@ namespace BajanVincyAssembly.Services.Compilers
                     case BVOperation.MIPSADD:
                         instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                         instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
-                        instruction.OperandImmediate = int.Parse(operationParts[3]);
+                        instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                         break;
                     case BVOperation.MIPSSUB:
                         instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                         instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
-                        instruction.OperandImmediate = int.Parse(operationParts[3]);
+                        instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                         break;
                     case BVOperation.MIPSLW:
+                        string secondOperationPart = operationParts[2].Replace(",", "").Trim();
+                        int indexOfFirstParenthesis = secondOperationPart.IndexOf("(");
+                        int indexOfSecondParenthesis = secondOperationPart.IndexOf(")");
                         instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
-                        instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
-                        instruction.OperandImmediate = int.Parse(operationParts[3]);
+                        instruction.OperandARegister = secondOperationPart.Substring(indexOfFirstParenthesis + 1, (indexOfSecondParenthesis - indexOfFirstParenthesis - 1)).Trim();
+                        instruction.OperandImmediate = int.Parse(secondOperationPart.Substring(0, indexOfFirstParenthesis).Trim());
                         break;
                     case BVOperation.MIPSSW:
+                        string secondOperationPart_ = operationParts[2].Replace(",", "").Trim();
+                        int indexOfFirstParenthesis_ = secondOperationPart_.IndexOf("(");
+                        int indexOfSecondParenthesis_ = secondOperationPart_.IndexOf(")");
                         instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
-                        instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
-                        instruction.OperandImmediate = int.Parse(operationParts[3]);
+                        instruction.OperandARegister = secondOperationPart_.Substring(indexOfFirstParenthesis_ + 1, (indexOfSecondParenthesis_ - indexOfFirstParenthesis_ - 1)).Trim();
+                        instruction.OperandImmediate = int.Parse(secondOperationPart_.Substring(0, indexOfFirstParenthesis_).Trim());
                         break;
                 }
             }

@@ -55,7 +55,7 @@
             </ListView>
         </GroupBox>
         <TabControl Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
-            <TabItem Header="Compile Errors">
+            <TabItem Header="Compile Errors/Warnings">
                 <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Header="" Margin="10,10,10,10" BorderBrush="Black">
                     <ScrollViewer>
                         <TextBlock x:Name="TextBlock_CompileErrors" Background="White" Foreground="Red" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,5,5,5" Padding="5,5,5,5"></TextBlock>

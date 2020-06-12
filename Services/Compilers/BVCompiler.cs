@@ -46,7 +46,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 BVInstructionBuilder bvInstructionBuilder = new BVInstructionBuilder();
                 instructions = linesOfCode.Select(lineOfCode => bvInstructionBuilder.BuildInstruction(lineOfCode));
             }
-            else if (this.OnlyValidationMessagesAreMipsCodeDetections(codeValidationInfo))
+            else if (BVOperationValidationChecks.OnlyValidationMessagesAreMipsCodeDetections(codeValidationInfo))
             {
                 IEnumerable<string> linesOfCode = this.GetLinesOfCodeWithNoComments(code);
 
@@ -117,31 +117,6 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             return linesOfCode;
-        }
-
-        /// <summary>
-        /// Indicates if the only validation messages are mips detection messages
-        /// </summary>
-        /// <param name="validationInfo"> Validation Info </param>
-        /// <returns>bool</returns>
-        private bool OnlyValidationMessagesAreMipsCodeDetections(ValidationInfo validationInfo)
-        {
-            bool mipsDetectionMessageExist = false;
-            bool nonMipsValidationMessagesExist = false;
-
-            foreach (string validationMessage in  validationInfo?.ValidationMessages)
-            {
-                if (validationMessage.Contains(BVOperationValidationChecks.MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX))
-                {
-                    mipsDetectionMessageExist = true;
-                }
-                else
-                {
-                    nonMipsValidationMessagesExist = true;
-                }
-            }
-
-            return mipsDetectionMessageExist && !nonMipsValidationMessagesExist;
         }
     }
 }

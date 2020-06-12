@@ -213,6 +213,6 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         /// <summary>
         /// Collection of Mips Operation Codes
         /// </summary>
-        public List<BVOperation> MipsOperations { get; } = new List<BVOperation>() { BVOperation.MIPSADD, BVOperation.MIPSSUB, BVOperation.MIPSLW, BVOperation.MIPSSW };
+        public static List<BVOperation> MipsOperations = new List<BVOperation>() { BVOperation.MIPSADD, BVOperation.MIPSSUB, BVOperation.MIPSLW, BVOperation.MIPSSW };
     }
 }

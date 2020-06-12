@@ -251,16 +251,28 @@ namespace BajanVincyAssembly.Services.Compilers
                         lineOfCode_ValidationInfo = this.RunGoToJumpLabelInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.MIPSADD:
-                        lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSADD" } };
+                        if (BVOperationInfo.MipsOperations.Exists(x => x == operation))
+                        {
+                            lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSADD" } };
+                        }
                         break;
                     case BVOperation.MIPSSUB:
-                        lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSUB" } };
+                        if (BVOperationInfo.MipsOperations.Exists(x => x == operation))
+                        {
+                            lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSUB" } };
+                        }
                         break;
                     case BVOperation.MIPSLW:
-                        lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSLW" } };
+                        if (BVOperationInfo.MipsOperations.Exists(x => x == operation))
+                        {
+                            lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSLW" } };
+                        }
                         break;
                     case BVOperation.MIPSSW:
-                        lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSW" } };
+                        if (BVOperationInfo.MipsOperations.Exists(x => x == operation))
+                        {
+                            lineOfCode_ValidationInfo = new ValidationInfo() { IsValid = false, ValidationMessages = new List<string>() { $"{MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX}: MIPSSW" } };
+                        }
                         break;
                 }
 
@@ -313,7 +325,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -362,7 +374,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -403,7 +415,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -444,7 +456,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -493,7 +505,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -534,7 +546,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -575,7 +587,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -624,7 +636,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -665,7 +677,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -714,7 +726,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -755,7 +767,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -796,7 +808,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -845,7 +857,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -886,7 +898,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -927,7 +939,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -976,7 +988,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1017,7 +1029,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1066,7 +1078,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1115,7 +1127,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1156,7 +1168,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1205,7 +1217,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1254,7 +1266,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1309,7 +1321,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1350,7 +1362,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1391,7 +1403,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1432,7 +1444,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1473,7 +1485,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1522,7 +1534,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1563,7 +1575,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1604,7 +1616,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1653,7 +1665,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1694,7 +1706,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1735,7 +1747,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1784,7 +1796,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1825,7 +1837,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1866,7 +1878,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1915,7 +1927,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -1956,7 +1968,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2005,7 +2017,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2062,7 +2074,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2111,7 +2123,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2152,7 +2164,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2201,7 +2213,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2242,7 +2254,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2291,7 +2303,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2332,7 +2344,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2381,7 +2393,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2422,7 +2434,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2471,7 +2483,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2512,7 +2524,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2561,7 +2573,7 @@ namespace BajanVincyAssembly.Services.Compilers
                 if (!this._Registry.Exists(operationOperandPart))
                 {
                     validationInfo.IsValid = validationInfo.IsValid && false;
-                    validationInfo.ValidationMessages.Add($"Unknown Register Found (${operationOperandPart}): -> ${lineOfCode}");
+                    validationInfo.ValidationMessages.Add($"Unknown Register Found ({operationOperandPart}): -> ${lineOfCode}");
                 }
             }
 
@@ -2603,6 +2615,31 @@ namespace BajanVincyAssembly.Services.Compilers
             }
 
             return validationInfo;
+        }
+
+        /// <summary>
+        /// Indicates if the only validation messages are mips detection messages
+        /// </summary>
+        /// <param name="validationInfo"> Validation Info </param>
+        /// <returns>bool</returns>
+        public static bool OnlyValidationMessagesAreMipsCodeDetections(ValidationInfo validationInfo)
+        {
+            bool mipsDetectionMessageExist = false;
+            bool nonMipsValidationMessagesExist = false;
+
+            foreach (string validationMessage in validationInfo?.ValidationMessages)
+            {
+                if (validationMessage.Contains(BVOperationValidationChecks.MIPS_INSTRUCTION_DETECTED_MESSAGE_PREFIX))
+                {
+                    mipsDetectionMessageExist = true;
+                }
+                else
+                {
+                    nonMipsValidationMessagesExist = true;
+                }
+            }
+
+            return mipsDetectionMessageExist && !nonMipsValidationMessagesExist;
         }
     }
 }
