@@ -12,20 +12,26 @@ namespace BajanVincyAssembly.Services.Compilers
     /// </summary>
     public class BVInstructionBuilder
     {
-        public BVInstructionBuilder()
-        {
+        /// <summary>
+        /// Indicates if hardware forwarding is available
+        /// </summary>
+        private readonly bool _HardwareForwardingAvailable = false;
 
+        public BVInstructionBuilder(bool hardwareForwardingAvailable = false)
+        {
+            this._HardwareForwardingAvailable = hardwareForwardingAvailable;
         }
 
         /// <summary>
         /// Builds a BV Instruction from a line of code
         /// </summary>
-        /// <param name="lineOfCode"></param>
+        /// <param name="lineOfCode"> raw lines of code </param>
         /// <returns></returns>
         public Instruction BuildInstruction(string lineOfCode)
         {
             Instruction.InstructionAddressPointer += 32;
-            Instruction instruction = new Instruction();
+            Instruction instruction = new Instruction(Instruction.InstructionAddressPointer);
+            instruction.AssemblyStatement = lineOfCode;
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -159,7 +165,7 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
                     break;
                 case BVOperation.TOCONSTCONST:
-                    
+
                     break;
                 case BVOperation.COPY:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
@@ -298,7 +304,81 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
                     break;
                 case BVOperation.JUMPLABEL:
-                    instruction.JumpLabel = operationParts[0].Substring(0, operationParts[0].Length -1);
+                    instruction.JumpLabel = operationParts[0].Substring(0, operationParts[0].Length - 1);
+                    break;
+                case BVOperation.MIPSADD:
+                    instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
+                    instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
+                    instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
+                    instruction.DataDependencyHazardForOthers = new DataDependencyHazardForOthers()
+                    {
+                        RegisterName = instruction.DestinationRegister,
+                        StageAvailibity_NoForwarding = PipelineStage.WB,
+                        StageAvailibity_WithForwarding = PipelineStage.EX
+                    };
+                    instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
+                    {
+                        RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.ID
+                    };
+                    break;
+                case BVOperation.MIPSSUB:
+                    instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
+                    instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
+                    instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
+                    instruction.DataDependencyHazardForOthers = new DataDependencyHazardForOthers()
+                    {
+                        RegisterName = instruction.DestinationRegister,
+                        StageAvailibity_NoForwarding = PipelineStage.WB,
+                        StageAvailibity_WithForwarding = PipelineStage.EX
+                    };
+                    instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
+                    {
+                        RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.ID
+                    };
+                    break;
+                case BVOperation.MIPSLW:
+                    string secondOperationPart = operationParts[2].Replace(",", "").Trim();
+                    int indexOfFirstParenthesis = secondOperationPart.IndexOf("(");
+                    int indexOfSecondParenthesis = secondOperationPart.IndexOf(")");
+                    instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
+                    instruction.OperandARegister = secondOperationPart.Substring(indexOfFirstParenthesis + 1, (indexOfSecondParenthesis - indexOfFirstParenthesis - 1)).Trim();
+                    instruction.OperandImmediate = int.Parse(secondOperationPart.Substring(0, indexOfFirstParenthesis).Trim());
+                    instruction.DataDependencyHazardForOthers = new DataDependencyHazardForOthers()
+                    {
+                        RegisterName = instruction.DestinationRegister,
+                        StageAvailibity_NoForwarding = PipelineStage.WB,
+                        StageAvailibity_WithForwarding = PipelineStage.MEM
+                    };
+                    instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
+                    {
+                        RegisterNames = new List<string>(),
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.MEM
+                    };
+                    break;
+                case BVOperation.MIPSSW:
+                    string secondOperationPart_ = operationParts[2].Replace(",", "").Trim();
+                    int indexOfFirstParenthesis_ = secondOperationPart_.IndexOf("(");
+                    int indexOfSecondParenthesis_ = secondOperationPart_.IndexOf(")");
+                    instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
+                    instruction.OperandARegister = secondOperationPart_.Substring(indexOfFirstParenthesis_ + 1, (indexOfSecondParenthesis_ - indexOfFirstParenthesis_ - 1)).Trim();
+                    instruction.OperandImmediate = int.Parse(secondOperationPart_.Substring(0, indexOfFirstParenthesis_).Trim());
+                    instruction.DataDependencyHazardForOthers = new DataDependencyHazardForOthers()
+                    {
+                        RegisterName = instruction.DestinationRegister,
+                        StageAvailibity_NoForwarding = PipelineStage.MEM,
+                        StageAvailibity_WithForwarding = PipelineStage.MEM
+                    };
+                    instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
+                    {
+                        RegisterNames = new List<string>() { instruction.DestinationRegister },
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.MEM
+                    };
                     break;
             }
 

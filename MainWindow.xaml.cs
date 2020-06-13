@@ -39,6 +39,7 @@ namespace BajanVincyAssembly
             this.Reset();
 
             this.ListViewOfRegisters.ItemsSource = this.Registers;
+            this.ListViewOfTimingDiagram.ItemsSource = this.InstructionTimingDiagrams;
         }
 
         /// <summary>
@@ -72,6 +73,11 @@ namespace BajanVincyAssembly
         public ObservableCollection<string> OuputMessages = new ObservableCollection<string>();
 
         /// <summary>
+        /// Instruction Timing Diagrams
+        /// </summary>
+        public ObservableCollection<InstructionTimingDiagram> InstructionTimingDiagrams = new ObservableCollection<InstructionTimingDiagram>();
+
+        /// <summary>
         /// Compiles BV Assembly Code
         /// </summary>
         /// <param name="linesOfCode"></param>
@@ -85,9 +91,32 @@ namespace BajanVincyAssembly
 
             this.UpdateViewOfCompileErrors();
 
-            if (!this._Code_ValidationInfo.IsValid)
+            if (!this._Code_ValidationInfo.IsValid && !BVOperationValidationChecks.OnlyValidationMessagesAreMipsCodeDetections(this._Code_ValidationInfo))
             {
                 this.ShowNotificationsWindow(new List<string>() { $"There are compile Issues. Check 'Compile Errors' Tab!" });
+            }
+            else if (BVOperationValidationChecks.OnlyValidationMessagesAreMipsCodeDetections(this._Code_ValidationInfo))
+            {
+                // Generate/Build Instructions
+                IEnumerable<Instruction> compiledInstructions = this._BVCompiler.Compile(rawCode, true);
+                this._Processor = new Processor(compiledInstructions, false);
+
+                this.UpdateLatestSnapshotOfProcessorInstructions();
+
+                if (this.ProcessorInstructions.Any())
+                {
+                    // Jump onto Main UI Thread
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        this.Button_Compile.IsEnabled = false;
+                        this.Button_RunAll.IsEnabled = false;
+                        this.Button_Debug.IsEnabled = false;
+                        this.Button_DebugNext.IsEnabled = false;
+                        this.Button_Stop.IsEnabled = true;
+                        this.Button_RunMipsAnalysis_NoForward.IsEnabled = true;
+                        this.Button_RunMipsAnalysis_Forward.IsEnabled = true;
+                    }));
+                }
             }
             else
             {
@@ -107,6 +136,8 @@ namespace BajanVincyAssembly
                         this.Button_Debug.IsEnabled = true;
                         this.Button_DebugNext.IsEnabled = true;
                         this.Button_Stop.IsEnabled = true;
+                        this.Button_RunMipsAnalysis_NoForward.IsEnabled = true;
+                        this.Button_RunMipsAnalysis_Forward.IsEnabled = true;
                     }));
                 }
             }
@@ -129,6 +160,8 @@ namespace BajanVincyAssembly
                 this.Button_RunAll.IsEnabled = false;
                 this.Button_Debug.IsEnabled = false;
                 this.Button_DebugNext.IsEnabled = false;
+                this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
                 this.Button_Stop.IsEnabled = true;
             }));
 
@@ -153,6 +186,8 @@ namespace BajanVincyAssembly
                         this.Button_RunAll.IsEnabled = false;
                         this.Button_Debug.IsEnabled = false;
                         this.Button_DebugNext.IsEnabled = false;
+                        this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                        this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
                         this.Button_Stop.IsEnabled = false;
                     }));
 
@@ -177,6 +212,8 @@ namespace BajanVincyAssembly
                 this.Button_Compile.IsEnabled = false;
                 this.Button_RunAll.IsEnabled = false;
                 this.Button_Debug.IsEnabled = false;
+                this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
                 this.Button_DebugNext.IsEnabled = true;
                 this.Button_Stop.IsEnabled = true;
             }));
@@ -204,6 +241,8 @@ namespace BajanVincyAssembly
                         this.Button_Debug.IsEnabled = false;
                         this.Button_DebugNext.IsEnabled = false;
                         this.Button_Stop.IsEnabled = false;
+                        this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                        this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
                     }));
 
                     this.ShowNotificationsWindow(new List<string>() { $"There are Run Time Issues. Check 'Run Time Errors' Tab!" });
@@ -228,6 +267,96 @@ namespace BajanVincyAssembly
         }
 
         /// <summary>
+        /// Run Mips Analysis (Generate Timing Diagram) for hardware with no forwarding available
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Button_Click_RunMipsTimeAnalysisWithNoForwarding(object sender, RoutedEventArgs e)
+        {
+            var rawCode = this.TextBox_Code.Text;
+
+            // Generate/Build Instructions
+            IEnumerable<Instruction> compiledInstructions = this._BVCompiler.Compile(rawCode, true);
+            this._Processor = new Processor(compiledInstructions, false);
+
+            this.UpdateLatestSnapshotOfProcessorInstructions();
+
+            if (this.ProcessorInstructions.Any())
+            {
+                this._Processor.GenerateTimingAnalysisForInstructions();
+                var processorState = this._Processor.GetProcessorPipelineState();
+                var dependencyHazards = this._Processor.GetDependencyHazards();
+
+                StringBuilder stringBuilder = new StringBuilder();
+                foreach (string hazard in dependencyHazards)
+                {
+                    stringBuilder.AppendLine(hazard);
+                }
+
+                // Jump onto Main UI Thread
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    this.TextBlock_TimingDiagramHeader.Text = "With No Hardware Forwarding:";
+                    this.TextBlock_DependencyHazards.Text = stringBuilder.ToString();
+                    this.InstructionTimingDiagrams.Clear();
+                    foreach (var instructionState in processorState)
+                    {
+                        this.InstructionTimingDiagrams.Add(new InstructionTimingDiagram()
+                        {
+                            AssemblyStatement = instructionState.Value.Instruction.AssemblyStatement,
+                            TimingDiagram = instructionState.Value.ProcessingTimingDiagram
+                        });
+                    }
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Run Mips Analysis (Generate Timing Diagram) for hardware with forwarding available
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Button_Click_RunMipsTimeAnalysisWithForwarding(object sender, RoutedEventArgs e)
+        {
+            var rawCode = this.TextBox_Code.Text;
+
+            // Generate/Build Instructions
+            IEnumerable<Instruction> compiledInstructions = this._BVCompiler.Compile(rawCode, true);
+            this._Processor = new Processor(compiledInstructions, true);
+
+            this.UpdateLatestSnapshotOfProcessorInstructions();
+
+            if (this.ProcessorInstructions.Any())
+            {
+                this._Processor.GenerateTimingAnalysisForInstructions();
+                var processorState = this._Processor.GetProcessorPipelineState();
+                var dependencyHazards = this._Processor.GetDependencyHazards();
+
+                StringBuilder stringBuilder = new StringBuilder();
+                foreach (string hazard in dependencyHazards)
+                {
+                    stringBuilder.AppendLine(hazard);
+                }
+
+                // Jump onto Main UI Thread
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    this.TextBlock_TimingDiagramHeader.Text = "With Hardware Forwarding:";
+                    this.TextBlock_DependencyHazards.Text = stringBuilder.ToString();
+                    this.InstructionTimingDiagrams.Clear();
+                    foreach (var instructionState in processorState)
+                    {
+                        this.InstructionTimingDiagrams.Add(new InstructionTimingDiagram()
+                        {
+                            AssemblyStatement = instructionState.Value.Instruction.AssemblyStatement,
+                            TimingDiagram = instructionState.Value.ProcessingTimingDiagram
+                        });
+                    }
+                }));
+            }
+        }
+
+        /// <summary>
         /// Resets IDE State
         /// </summary>
         private void Reset()
@@ -249,6 +378,8 @@ namespace BajanVincyAssembly
                 this.Button_Debug.IsEnabled = false;
                 this.Button_DebugNext.IsEnabled = false;
                 this.Button_Stop.IsEnabled = false;
+                this.Button_RunMipsAnalysis_NoForward.IsEnabled = false;
+                this.Button_RunMipsAnalysis_Forward.IsEnabled = false;
             }));
         }
 

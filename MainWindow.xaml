@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BajanVincyAssembly"
         mc:Ignorable="d"
-        Title="Bajan Vincy Assembly IDE" MinHeight="700" Width="800">
+        Title="Bajan Vincy Assembly IDE" MinHeight="700" MinWidth="1020" Width="1020">
 
     <Grid HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
@@ -36,6 +36,8 @@
                 <Button Name="Button_Debug" Background="YellowGreen" Foreground="White" Click="Button_Click_Debug">Debug</Button>
                 <Button Name="Button_DebugNext" Background="YellowGreen" Foreground="White" Click="Button_Click_Debug">Debug: Next</Button>
                 <Button Name="Button_Stop" Background="DarkRed" Foreground="White" Click="Button_Click_Stop">Stop</Button>
+                <Button Name="Button_RunMipsAnalysis_NoForward" Background="Green" Foreground="White" Click="Button_Click_RunMipsTimeAnalysisWithNoForwarding">Mips Analysis No Forward</Button>
+                <Button Name="Button_RunMipsAnalysis_Forward" Background="Green" Foreground="White" Click="Button_Click_RunMipsTimeAnalysisWithForwarding">Mips Analysis Forward</Button>
             </StackPanel>
             <GroupBox Grid.Row="1" Grid.Column="0" Header="Assembly Code" Margin="10,10,10,10" BorderBrush="Black">
                 <TextBox x:Name="TextBox_Code" Background="White" IsEnabled="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,5,5,5" Padding="5,5,5,5" AcceptsReturn="True"></TextBox>
@@ -53,7 +55,7 @@
             </ListView>
         </GroupBox>
         <TabControl Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
-            <TabItem Header="Compile Errors">
+            <TabItem Header="Compile Errors/Warnings">
                 <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Header="" Margin="10,10,10,10" BorderBrush="Black">
                     <ScrollViewer>
                         <TextBlock x:Name="TextBlock_CompileErrors" Background="White" Foreground="Red" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,5,5,5" Padding="5,5,5,5"></TextBlock>
@@ -71,6 +73,28 @@
                 <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Header="" Margin="10,10,10,10" BorderBrush="Black">
                     <ScrollViewer>
                         <TextBlock x:Name="TextBlock_Ouput" Background="White" Foreground="DarkGreen" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,5,5,5" Padding="5,5,5,5"></TextBlock>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="Timing Diagram">
+                <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Header="" Margin="10,10,10,10" BorderBrush="Black">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Name="TextBlock_TimingDiagramHeader" Background="White" Foreground="DarkGreen" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,5,5,5" Padding="5,5,5,5"></TextBlock>
+                        <ListView x:Name="ListViewOfTimingDiagram" Margin="5">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Instruction / Assembly:" Width="Auto" DisplayMemberBinding="{Binding AssemblyStatement}"/>
+                                    <GridViewColumn Header="TimingDiagram" Width="Auto" DisplayMemberBinding="{Binding TimingDiagram}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="DependencyHazards">
+                <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Header="" Margin="10,10,10,10" BorderBrush="Black">
+                    <ScrollViewer>
+                        <TextBlock x:Name="TextBlock_DependencyHazards" Background="White" Foreground="DarkGreen" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,5,5,5" Padding="5,5,5,5"></TextBlock>
                     </ScrollViewer>
                 </GroupBox>
             </TabItem>

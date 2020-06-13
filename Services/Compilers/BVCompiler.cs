@@ -33,17 +33,23 @@ namespace BajanVincyAssembly.Services.Compilers
         public static readonly string CommentSignarture = "//";
 
         /// <inheritdoc cref="ICompile{T}"/>
-        public IEnumerable<Instruction> Compile(string code)
+        public IEnumerable<Instruction> Compile(string code, bool onlyMipsInstructions = false)
         {
             IEnumerable<Instruction> instructions = new List<Instruction>();
+            ValidationInfo codeValidationInfo = this.ValidateCode(code);
 
-            if (this.ValidateCode(code).IsValid)
+            if (codeValidationInfo.IsValid || (BVOperationValidationChecks.OnlyValidationMessagesAreMipsCodeDetections(codeValidationInfo) && onlyMipsInstructions))
             {
                 IEnumerable<string> linesOfCode = this.GetLinesOfCodeWithNoComments(code);
 
                 // Build Instructions from code and return them
                 BVInstructionBuilder bvInstructionBuilder = new BVInstructionBuilder();
                 instructions = linesOfCode.Select(lineOfCode => bvInstructionBuilder.BuildInstruction(lineOfCode));
+
+                if (instructions.Any() && onlyMipsInstructions)
+                {
+                    instructions = instructions.Where(instruction => BVOperationInfo.MipsOperations.Exists(operation => operation == instruction.Operation));
+                }
             }
 
             return instructions;
