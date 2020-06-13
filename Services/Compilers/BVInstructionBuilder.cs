@@ -320,7 +320,7 @@ namespace BajanVincyAssembly.Services.Compilers
                     {
                         RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
                         WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.EX,
-                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.ID
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.EX
                     };
                     break;
                 case BVOperation.MIPSSUB:
@@ -337,7 +337,7 @@ namespace BajanVincyAssembly.Services.Compilers
                     {
                         RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
                         WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.EX,
-                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.ID
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.EX
                     };
                     break;
                 case BVOperation.MIPSLW:

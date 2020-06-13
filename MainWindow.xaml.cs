@@ -289,7 +289,7 @@ namespace BajanVincyAssembly
                 // Jump onto Main UI Thread
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    this.TextBlock_TimingDiagramHeader.Text = "With Hardware Forwarding:";
+                    this.TextBlock_TimingDiagramHeader.Text = "With No Hardware Forwarding:";
                     this.InstructionTimingDiagrams.Clear();
                     foreach (var instructionState in processorState)
                     {

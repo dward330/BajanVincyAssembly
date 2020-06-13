@@ -89,6 +89,8 @@ namespace BajanVincyAssembly.Services.Processor
         /// </summary>
         private Dictionary<int, InstructionPipelineState> _ProcessorPipelineState = new Dictionary<int, InstructionPipelineState>();
 
+        //private List<string> DependencyHazards
+
         /// <inheritdoc cref="IProcessor"/>
         public IEnumerable<Register> GetRegisters()
         {
