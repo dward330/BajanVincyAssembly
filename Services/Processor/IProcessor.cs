@@ -40,5 +40,10 @@ namespace BajanVincyAssembly.Services.Processor
         /// </summary>
         /// <returns></returns>
         Instruction GetNextInstruction();
+
+        /// <summary>
+        /// Generates Complete Timing Diagram for all Instructions
+        /// </summary>
+        void GenerateTimingAnalysisForInstructions();
     }
 }

@@ -17,10 +17,19 @@ namespace BajanVincyAssembly.Services.Processor
         /// <summary>
         /// Instantiates a new instance of the <see cref="Processor" class/>
         /// </summary>
-        public Processor(IEnumerable<Instruction> instructions)
+        /// <param name="instructions"> instructions to process </param>
+        /// <param name="hardwareForwardingAvailable"> Indicates if hardware forwarding is available </param>
+        public Processor(IEnumerable<Instruction> instructions, bool hardwareForwardingAvailable = false)
         {
             this._Registry = new Registry();
-            this._Instructions = instructions;
+            this._HardwareForwardingAvailable = hardwareForwardingAvailable;
+            foreach (Instruction instruction in instructions)
+            {
+                this._Instructions.Add(instruction);
+                this._ProcessorPipelineState.Add(instruction.InstructionAddress, new InstructionPipelineState() {
+                    Instruction = instruction
+                });
+            }
         }
 
         /// <summary>
@@ -31,7 +40,7 @@ namespace BajanVincyAssembly.Services.Processor
         /// <summary>
         /// Collection of Instructions Processed
         /// </summary>
-        private IEnumerable<Instruction> _Instructions = new List<Instruction>();
+        private List<Instruction> _Instructions = new List<Instruction>();
 
         /// <summary>
         /// Program Instruction Pointer
@@ -65,6 +74,21 @@ namespace BajanVincyAssembly.Services.Processor
             return instructionCounter;
         }
 
+        /// <summary>
+        /// Indicates if hardware forwarding is available
+        /// </summary>
+        private readonly bool _HardwareForwardingAvailable = false;
+
+        /// <summary>
+        /// Indicated if timing diagram analysis is all that needs to run
+        /// </summary>
+        private readonly bool _RunTimingDiagramAnalysisOnly = false;
+
+        /// <summary>
+        /// Current Pipeline State of the Processor
+        /// </summary>
+        private Dictionary<int, InstructionPipelineState> _ProcessorPipelineState = new Dictionary<int, InstructionPipelineState>();
+
         /// <inheritdoc cref="IProcessor"/>
         public IEnumerable<Register> GetRegisters()
         {
@@ -96,6 +120,73 @@ namespace BajanVincyAssembly.Services.Processor
         }
 
         /// <inheritdoc cref="IProcessor"/>
+        public void GenerateTimingAnalysisForInstructions()
+        {
+            var deepCopyOfAllInstructions = this._Instructions.DeepClone();
+
+            int cycleCounter = 0;
+
+            while (this._Instructions.Any())
+            {
+                IEnumerable<Instruction> instructions = this._Instructions.ToList().OrderBy(x => x.InstructionAddress);
+
+                // Go to the next clock cycle
+                foreach (Instruction currentInstruction in instructions)
+                {
+                    // Am I suppose to come into the pipeline now?
+                    var currentInstructionFromDeepCopy = deepCopyOfAllInstructions.Single(x => x.InstructionAddress == currentInstruction.InstructionAddress);
+                    if (deepCopyOfAllInstructions.IndexOf(currentInstructionFromDeepCopy) > cycleCounter)
+                    {
+                        this._ProcessorPipelineState[currentInstruction.InstructionAddress].AddStallCycle();
+                        continue;
+                    }
+
+                    // Remove this instruction from the pipeline if it was already at the end
+                    if (this._ProcessorPipelineState[currentInstruction.InstructionAddress].CurrentPipelineStage == PipelineStage.WB)
+                    {
+                        // Mark instruction as processed
+                        this._ProcessorPipelineState[currentInstruction.InstructionAddress].CurrentPipelineStage = PipelineStage.Processed;
+
+                        // Find Intruction to remove from list of instructions still in the pipeline
+                        var instructionToRemove = this._Instructions.Single(x => x.InstructionAddress == currentInstruction.InstructionAddress);
+                        
+                        // Removed the Instruction because it has been fully processed now
+                        this._Instructions.Remove(instructionToRemove);
+
+                        // Go to the next instruction
+                        continue;
+                    }
+
+                    bool earlierInstructionExistInPipeline = instructions.ToList().Exists(x => x.InstructionAddress < currentInstruction.InstructionAddress);
+
+                    if (!earlierInstructionExistInPipeline)
+                    {
+                        // Progress to the next stage of the pipeline
+                        this._ProcessorPipelineState[currentInstruction.InstructionAddress].MoveToNextPipelineStage();
+                    }
+                    else // I am not the first or only instruction
+                    {
+                        // Are my needs met to proceed to the next pipeline stage?
+                        bool dependencyNeedsMet = this.InstructionDataDependencyNeedsAreMet(currentInstruction);
+
+                        if (!dependencyNeedsMet)
+                        {
+                            this._ProcessorPipelineState[currentInstruction.InstructionAddress].AddStallCycle();
+                        }
+                        else
+                        {
+                            this._ProcessorPipelineState[currentInstruction.InstructionAddress].MoveToNextPipelineStage();
+                        }
+                    }                    
+                }
+
+                cycleCounter++;
+            }
+
+            var finished = 0;
+        }
+
+        /// <inheritdoc cref="IProcessor"/>
         public Instruction GetNextInstruction()
         {
             Instruction instruction;
@@ -103,6 +194,15 @@ namespace BajanVincyAssembly.Services.Processor
             instruction = this._Instructions.Skip(this._ProgramInstructionPointer).Take(1).FirstOrDefault();
 
             return instruction;
+        }
+
+        /// <summary>
+        /// Returns the current processor pipeline state
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, InstructionPipelineState> GetProcessorPipelineState()
+        {
+            return this._ProcessorPipelineState.DeepClone();
         }
 
         /// <summary>
@@ -493,5 +593,50 @@ namespace BajanVincyAssembly.Services.Processor
             }
         }
 
+        /// <summary>
+        /// Indicates if an instructions data dependency needs are met
+        /// </summary>
+        /// <param name="currentInstruction"> current instruction </param>
+        /// <returns>Indicator if the Instruction as all its needs met at this point</returns>
+        private bool InstructionDataDependencyNeedsAreMet(Instruction currentInstruction)
+        {
+            bool needsMet = true;
+
+            foreach (string register in currentInstruction.DataDependencyNeedsIHave.RegisterNames)
+            {
+                // Find the latest instruction before this instruction that has this register as a data dependency for others
+                Instruction latestEarlierInstruction = null;
+                foreach (var instruction in this._ProcessorPipelineState)
+                {
+                    if (instruction.Key >= currentInstruction.InstructionAddress)
+                    {
+                        continue;
+                    }
+                    else if( (latestEarlierInstruction == null || instruction.Key > latestEarlierInstruction.InstructionAddress)
+                             && string.Equals(instruction.Value.Instruction.DataDependencyHazardForOthers.RegisterName, register, StringComparison.InvariantCultureIgnoreCase) )
+                    {
+                        // We found an earlier and later instruction with our data dependency
+                        latestEarlierInstruction = instruction.Value.Instruction;
+                    }
+                }
+
+                // No earlier instruction with our data dependency was found
+                if (latestEarlierInstruction == null)
+                {
+                    needsMet = needsMet && true;
+                }
+                else
+                {
+                    var stateOflatestEarlierInstruction = this._ProcessorPipelineState[latestEarlierInstruction.InstructionAddress];
+                    var whenDataIsAvailableWithForwarding = stateOflatestEarlierInstruction.Instruction.DataDependencyHazardForOthers.StageAvailibity_WithForwarding;
+                    var whenDataIsAvailableWithNoForwarding = stateOflatestEarlierInstruction.Instruction.DataDependencyHazardForOthers.StageAvailibity_NoForwarding;
+                    needsMet = needsMet &&
+                                (stateOflatestEarlierInstruction.CurrentPipelineStage ==
+                                    (this._HardwareForwardingAvailable ? whenDataIsAvailableWithForwarding : whenDataIsAvailableWithNoForwarding));
+                }
+            }
+
+            return needsMet;
+        }
     }
 }

@@ -36,8 +36,8 @@
                 <Button Name="Button_Debug" Background="YellowGreen" Foreground="White" Click="Button_Click_Debug">Debug</Button>
                 <Button Name="Button_DebugNext" Background="YellowGreen" Foreground="White" Click="Button_Click_Debug">Debug: Next</Button>
                 <Button Name="Button_Stop" Background="DarkRed" Foreground="White" Click="Button_Click_Stop">Stop</Button>
-                <Button Name="Button_RunMipsAnalysis_NoForward" Background="Green" Foreground="White">Mips Analysis No Forward</Button>
-                <Button Name="Button_RunMipsAnalysis_Forward" Background="Green" Foreground="White">Mips Analysis Forward</Button>
+                <Button Name="Button_RunMipsAnalysis_NoForward" Background="Green" Foreground="White" Click="Button_Click_RunMipsTimeAnalysisWithNoForwarding">Mips Analysis No Forward</Button>
+                <Button Name="Button_RunMipsAnalysis_Forward" Background="Green" Foreground="White" Click="Button_Click_RunMipsTimeAnalysisWithForwarding">Mips Analysis Forward</Button>
             </StackPanel>
             <GroupBox Grid.Row="1" Grid.Column="0" Header="Assembly Code" Margin="10,10,10,10" BorderBrush="Black">
                 <TextBox x:Name="TextBox_Code" Background="White" IsEnabled="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,5,5,5" Padding="5,5,5,5" AcceptsReturn="True"></TextBox>

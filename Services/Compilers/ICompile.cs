@@ -25,7 +25,8 @@ namespace BajanVincyAssembly.Services.Compilers
         /// Compiles Code and Returns collection of instructions
         /// </summary>
         /// <param name="code">Code to compile</param>
+        /// <param name="onlyMipsInstructions"> Indicates if we should only Compile Mips Instructions</param>
         /// <returns>Collection of Instructions</returns>
-        IEnumerable<T> Compile(string code);
+        IEnumerable<T> Compile(string code, bool onlyMipsInstructions = false);
     }
 }

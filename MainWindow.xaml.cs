@@ -92,8 +92,8 @@ namespace BajanVincyAssembly
             else if (BVOperationValidationChecks.OnlyValidationMessagesAreMipsCodeDetections(this._Code_ValidationInfo))
             {
                 // Generate/Build Instructions
-                IEnumerable<Instruction> compiledInstructions = this._BVCompiler.Compile(rawCode);
-                this._Processor = new Processor(compiledInstructions);
+                IEnumerable<Instruction> compiledInstructions = this._BVCompiler.Compile(rawCode, true);
+                this._Processor = new Processor(compiledInstructions, false);
 
                 this.UpdateLatestSnapshotOfProcessorInstructions();
 
@@ -258,6 +258,42 @@ namespace BajanVincyAssembly
         public void Button_Click_Stop(object sender, RoutedEventArgs e)
         {
             this.Reset();
+        }
+
+        /// <summary>
+        /// Run Mips Analysis (Generate Timing Diagram) for hardware with no forwarding available
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Button_Click_RunMipsTimeAnalysisWithNoForwarding(object sender, RoutedEventArgs e)
+        {
+            var rawCode = this.TextBox_Code.Text;
+
+            // Generate/Build Instructions
+            IEnumerable<Instruction> compiledInstructions = this._BVCompiler.Compile(rawCode, true);
+            this._Processor = new Processor(compiledInstructions, false);
+
+            this.UpdateLatestSnapshotOfProcessorInstructions();
+
+            if (this.ProcessorInstructions.Any())
+            {
+                this._Processor.GenerateTimingAnalysisForInstructions();
+            }
+        }
+
+        /// <summary>
+        /// Run Mips Analysis (Generate Timing Diagram) for hardware with forwarding available
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Button_Click_RunMipsTimeAnalysisWithForwarding(object sender, RoutedEventArgs e)
+        {
+            var rawCode = this.TextBox_Code.Text;
+
+            // Generate/Build Instructions
+            IEnumerable<Instruction> compiledInstructions = this._BVCompiler.Compile(rawCode, true);
+            this._Processor = new Processor(compiledInstructions, true);
+            this._Processor.GenerateTimingAnalysisForInstructions();
         }
 
         /// <summary>

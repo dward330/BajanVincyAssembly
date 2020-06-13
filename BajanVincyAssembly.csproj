@@ -84,6 +84,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\ComputerArchitecture\BVOperation.cs" />
+    <Compile Include="Models\ComputerArchitecture\DataDependencyHazardForOthers.cs" />
+    <Compile Include="Models\ComputerArchitecture\DataDependencyNeedIHave.cs" />
     <Compile Include="Models\ComputerArchitecture\Instruction.cs" />
     <Compile Include="Models\ObjectExtensions.cs" />
     <Compile Include="Services\Compilers\BVInstructionBuilder.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Services\Processor\IProcessor.cs" />
     <Compile Include="Services\Processor\Processor.cs" />
     <Compile Include="Services\Registers\IRegistry.cs" />
+    <Compile Include="Models\ComputerArchitecture\InstructionPipelineState.cs" />
     <Compile Include="Services\Registers\Registry.cs" />
     <Compile Include="UserControls\NotificationWindow.xaml.cs">
       <DependentUpon>NotificationWindow.xaml</DependentUpon>
