@@ -364,6 +364,8 @@ namespace BajanVincyAssembly.Services.Compilers
                 validationInfo.IsValid = validationInfo.IsValid && false;
                 validationInfo.ValidationMessages.Add($"Invalid Instruction Format Found: -> ${lineOfCode}");
                 validationInfo.ValidationMessages.Add($"Correct Format: -> {operationName} #1, #2, #3");
+
+                return validationInfo;
             }
 
             var operationOperandPartsRaw = new List<string> { operationParts[1], operationParts[2], operationParts[3] };

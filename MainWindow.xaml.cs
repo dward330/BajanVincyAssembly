@@ -285,11 +285,19 @@ namespace BajanVincyAssembly
             {
                 this._Processor.GenerateTimingAnalysisForInstructions();
                 var processorState = this._Processor.GetProcessorPipelineState();
+                var dependencyHazards = this._Processor.GetDependencyHazards();
+
+                StringBuilder stringBuilder = new StringBuilder();
+                foreach (string hazard in dependencyHazards)
+                {
+                    stringBuilder.AppendLine(hazard);
+                }
 
                 // Jump onto Main UI Thread
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     this.TextBlock_TimingDiagramHeader.Text = "With No Hardware Forwarding:";
+                    this.TextBlock_DependencyHazards.Text = stringBuilder.ToString();
                     this.InstructionTimingDiagrams.Clear();
                     foreach (var instructionState in processorState)
                     {
@@ -322,11 +330,19 @@ namespace BajanVincyAssembly
             {
                 this._Processor.GenerateTimingAnalysisForInstructions();
                 var processorState = this._Processor.GetProcessorPipelineState();
+                var dependencyHazards = this._Processor.GetDependencyHazards();
+
+                StringBuilder stringBuilder = new StringBuilder();
+                foreach (string hazard in dependencyHazards)
+                {
+                    stringBuilder.AppendLine(hazard);
+                }
 
                 // Jump onto Main UI Thread
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     this.TextBlock_TimingDiagramHeader.Text = "With Hardware Forwarding:";
+                    this.TextBlock_DependencyHazards.Text = stringBuilder.ToString();
                     this.InstructionTimingDiagrams.Clear();
                     foreach (var instructionState in processorState)
                     {

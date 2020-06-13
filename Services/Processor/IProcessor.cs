@@ -51,5 +51,11 @@ namespace BajanVincyAssembly.Services.Processor
         /// </summary>
         /// <returns>Dictionary of Processor Intruction State</returns>
         Dictionary<int, InstructionPipelineState> GetProcessorPipelineState();
+
+        /// <summary>
+        /// Return Dependency Hazards Detected by the Processor
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetDependencyHazards();
     }
 }

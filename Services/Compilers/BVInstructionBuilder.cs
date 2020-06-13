@@ -319,8 +319,8 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
                     {
                         RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
-                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.EX,
-                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.EX
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.ID
                     };
                     break;
                 case BVOperation.MIPSSUB:
@@ -336,8 +336,8 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
                     {
                         RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
-                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.EX,
-                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.EX
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.ID
                     };
                     break;
                 case BVOperation.MIPSLW:

@@ -89,7 +89,10 @@ namespace BajanVincyAssembly.Services.Processor
         /// </summary>
         private Dictionary<int, InstructionPipelineState> _ProcessorPipelineState = new Dictionary<int, InstructionPipelineState>();
 
-        //private List<string> DependencyHazards
+        /// <summary>
+        /// All Dependency Hazards Detected
+        /// </summary>
+        private List<string> _DependencyHazards = new List<string>();
 
         /// <inheritdoc cref="IProcessor"/>
         public IEnumerable<Register> GetRegisters()
@@ -205,6 +208,15 @@ namespace BajanVincyAssembly.Services.Processor
         public Dictionary<int, InstructionPipelineState> GetProcessorPipelineState()
         {
             return this._ProcessorPipelineState.DeepClone();
+        }
+
+        /// <summary>
+        /// Gets Dependency Hazards
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetDependencyHazards()
+        {
+            return this._DependencyHazards.DeepClone();
         }
 
         /// <summary>
@@ -643,6 +655,16 @@ namespace BajanVincyAssembly.Services.Processor
                                         (this._HardwareForwardingAvailable ? whenDataIsAvailableWithForwarding : whenDataIsAvailableWithNoForwarding)) ||
                                         !((currentInstructionState.CurrentPipelineStage + 1) == (this._HardwareForwardingAvailable ? whenINeedDataAvailableWithForwarding : whenINeedDataAvailableWithNoForwarding))
                                     );
+
+                        if (!needsMet)
+                        {
+                            string dependencyHazardDetected = $"{currentInstruction.AssemblyStatement} -> has a data depedency on {register} with -> {latestEarlierInstruction.AssemblyStatement}";
+
+                            if (!this._DependencyHazards.Exists(existingHazard => string.Equals(existingHazard, dependencyHazardDetected, StringComparison.InvariantCultureIgnoreCase)))
+                            {
+                                this._DependencyHazards.Add(dependencyHazardDetected);
+                            }
+                        }
                     }
                 }
             }
