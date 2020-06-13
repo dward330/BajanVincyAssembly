@@ -318,7 +318,8 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
                     {
                         RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
-                        WhatStageINeedMyDependencyNeedsMet = PipelineStage.EX
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.EX,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.EX
                     };
                     break;
                 case BVOperation.MIPSSUB:
@@ -334,7 +335,8 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
                     {
                         RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
-                        WhatStageINeedMyDependencyNeedsMet = PipelineStage.EX
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.EX,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.EX
                     };
                     break;
                 case BVOperation.MIPSLW:
@@ -353,7 +355,8 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
                     {
                         RegisterNames = new List<string>(),
-                        WhatStageINeedMyDependencyNeedsMet = PipelineStage.ID
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.MEM
                     };
                     break;
                 case BVOperation.MIPSSW:
@@ -366,13 +369,14 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DataDependencyHazardForOthers = new DataDependencyHazardForOthers()
                     {
                         RegisterName = instruction.DestinationRegister,
-                        StageAvailibity_NoForwarding = PipelineStage.IF,
-                        StageAvailibity_WithForwarding = PipelineStage.IF
+                        StageAvailibity_NoForwarding = PipelineStage.MEM,
+                        StageAvailibity_WithForwarding = PipelineStage.MEM
                     };
                     instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
                     {
-                        RegisterNames = new List<string>() { instruction.OperandARegister },
-                        WhatStageINeedMyDependencyNeedsMet = PipelineStage.ID
+                        RegisterNames = new List<string>() { instruction.DestinationRegister },
+                        WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.MEM
                     };
                     break;
             }

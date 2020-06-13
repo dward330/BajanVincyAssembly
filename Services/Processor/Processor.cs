@@ -134,8 +134,8 @@ namespace BajanVincyAssembly.Services.Processor
                 foreach (Instruction currentInstruction in instructions)
                 {
                     // Am I suppose to come into the pipeline now?
-                    var currentInstructionFromDeepCopy = deepCopyOfAllInstructions.Single(x => x.InstructionAddress == currentInstruction.InstructionAddress);
-                    if (deepCopyOfAllInstructions.IndexOf(currentInstructionFromDeepCopy) > cycleCounter)
+                    var previousInstruction = this.GetPreviousInstruction(currentInstruction);
+                    if (previousInstruction != null && this._ProcessorPipelineState[previousInstruction.InstructionAddress].CurrentPipelineStage < PipelineStage.ID)
                     {
                         this._ProcessorPipelineState[currentInstruction.InstructionAddress].AddStallCycle();
                         continue;
@@ -167,7 +167,7 @@ namespace BajanVincyAssembly.Services.Processor
                     else // I am not the first or only instruction
                     {
                         // Are my needs met to proceed to the next pipeline stage?
-                        bool dependencyNeedsMet = this.InstructionDataDependencyNeedsAreMet(currentInstruction);
+                        bool dependencyNeedsMet = this.InstructionDataDependencyNeedsAreMetToMoveToNextCycle(currentInstruction);
 
                         if (!dependencyNeedsMet)
                         {
@@ -594,49 +594,83 @@ namespace BajanVincyAssembly.Services.Processor
         }
 
         /// <summary>
-        /// Indicates if an instructions data dependency needs are met
+        /// Indicates if an instructions data dependency needs are met to move to next cycle
         /// </summary>
         /// <param name="currentInstruction"> current instruction </param>
         /// <returns>Indicator if the Instruction as all its needs met at this point</returns>
-        private bool InstructionDataDependencyNeedsAreMet(Instruction currentInstruction)
+        private bool InstructionDataDependencyNeedsAreMetToMoveToNextCycle(Instruction currentInstruction)
         {
             bool needsMet = true;
 
-            foreach (string register in currentInstruction.DataDependencyNeedsIHave.RegisterNames)
+            if (currentInstruction.DataDependencyNeedsIHave.WhatStageINeedMyDependencyNeedsMet_NoForwarding == (this._ProcessorPipelineState[currentInstruction.InstructionAddress].CurrentPipelineStage + 1))
             {
-                // Find the latest instruction before this instruction that has this register as a data dependency for others
-                Instruction latestEarlierInstruction = null;
-                foreach (var instruction in this._ProcessorPipelineState)
+                foreach (string register in currentInstruction.DataDependencyNeedsIHave.RegisterNames)
                 {
-                    if (instruction.Key >= currentInstruction.InstructionAddress)
+                    // Find the latest instruction before this instruction that has this register as a data dependency for others
+                    Instruction latestEarlierInstruction = null;
+                    foreach (var instruction in this._ProcessorPipelineState)
                     {
-                        continue;
+                        if (instruction.Key >= currentInstruction.InstructionAddress)
+                        {
+                            continue;
+                        }
+                        else if ((latestEarlierInstruction == null || instruction.Key > latestEarlierInstruction.InstructionAddress)
+                                 && string.Equals(instruction.Value.Instruction.DataDependencyHazardForOthers.RegisterName, register, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            // We found an earlier and later instruction with our data dependency
+                            latestEarlierInstruction = instruction.Value.Instruction;
+                        }
                     }
-                    else if( (latestEarlierInstruction == null || instruction.Key > latestEarlierInstruction.InstructionAddress)
-                             && string.Equals(instruction.Value.Instruction.DataDependencyHazardForOthers.RegisterName, register, StringComparison.InvariantCultureIgnoreCase) )
-                    {
-                        // We found an earlier and later instruction with our data dependency
-                        latestEarlierInstruction = instruction.Value.Instruction;
-                    }
-                }
 
-                // No earlier instruction with our data dependency was found
-                if (latestEarlierInstruction == null)
-                {
-                    needsMet = needsMet && true;
-                }
-                else
-                {
-                    var stateOflatestEarlierInstruction = this._ProcessorPipelineState[latestEarlierInstruction.InstructionAddress];
-                    var whenDataIsAvailableWithForwarding = stateOflatestEarlierInstruction.Instruction.DataDependencyHazardForOthers.StageAvailibity_WithForwarding;
-                    var whenDataIsAvailableWithNoForwarding = stateOflatestEarlierInstruction.Instruction.DataDependencyHazardForOthers.StageAvailibity_NoForwarding;
-                    needsMet = needsMet &&
-                                (stateOflatestEarlierInstruction.CurrentPipelineStage ==
-                                    (this._HardwareForwardingAvailable ? whenDataIsAvailableWithForwarding : whenDataIsAvailableWithNoForwarding));
+                    // No earlier instruction with our data dependency was found
+                    if (latestEarlierInstruction == null)
+                    {
+                        needsMet = needsMet && true;
+                    }
+                    else
+                    {
+                        var stateOflatestEarlierInstructionState = this._ProcessorPipelineState[latestEarlierInstruction.InstructionAddress];
+                        var whenDataIsAvailableWithForwarding = stateOflatestEarlierInstructionState.Instruction.DataDependencyHazardForOthers.StageAvailibity_WithForwarding;
+                        var whenDataIsAvailableWithNoForwarding = stateOflatestEarlierInstructionState.Instruction.DataDependencyHazardForOthers.StageAvailibity_NoForwarding;
+                        var currentInstructionState = this._ProcessorPipelineState[currentInstruction.InstructionAddress];
+                        var whenINeedDataAvailableWithForwarding = currentInstructionState.Instruction.DataDependencyNeedsIHave.WhatStageINeedMyDependencyNeedsMet_WithForwarding;
+                        var whenINeedDataAvailableWithNoForwarding = currentInstructionState.Instruction.DataDependencyNeedsIHave.WhatStageINeedMyDependencyNeedsMet_NoForwarding;
+                        needsMet = needsMet &&
+                                    (
+                                    (stateOflatestEarlierInstructionState.CurrentPipelineStage >=
+                                        (this._HardwareForwardingAvailable ? whenDataIsAvailableWithForwarding : whenDataIsAvailableWithNoForwarding)) ||
+                                        !((currentInstructionState.CurrentPipelineStage + 1) == (this._HardwareForwardingAvailable ? whenINeedDataAvailableWithForwarding : whenINeedDataAvailableWithNoForwarding))
+                                    );
+                    }
                 }
             }
 
             return needsMet;
+        }
+
+        /// <summary>
+        /// Get my previous instruction
+        /// </summary>
+        /// <param name="currentInstruction"></param>
+        /// <returns></returns>
+        private Instruction GetPreviousInstruction(Instruction currentInstruction)
+        {
+            // Find the latest instruction before this instruction that has this register as a data dependency for others
+            Instruction latestEarlierInstruction = null;
+            foreach (var instruction in this._ProcessorPipelineState)
+            {
+                if (instruction.Key >= currentInstruction.InstructionAddress)
+                {
+                    continue;
+                }
+                else if (latestEarlierInstruction == null || instruction.Key > latestEarlierInstruction.InstructionAddress)
+                {
+                    // We found an earlier and later instruction with our data dependency
+                    latestEarlierInstruction = instruction.Value.Instruction;
+                }
+            }
+
+            return latestEarlierInstruction;
         }
     }
 }

@@ -17,8 +17,13 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         public List<string> RegisterNames { get; set; } = new List<string>();
 
         /// <summary>
-        /// Stage at which Register Dependency Needs need to be met
+        /// Stage at which Register Dependency Needs need to be met, with no forwarding
         /// </summary>
-        public PipelineStage WhatStageINeedMyDependencyNeedsMet { get; set; } = PipelineStage.IF;
+        public PipelineStage WhatStageINeedMyDependencyNeedsMet_NoForwarding { get; set; } = PipelineStage.IF;
+
+        /// <summary>
+        /// Stage at which Register Dependency Needs need to be met, with forwarding
+        /// </summary>
+        public PipelineStage WhatStageINeedMyDependencyNeedsMet_WithForwarding { get; set; } = PipelineStage.IF;
     }
 }
