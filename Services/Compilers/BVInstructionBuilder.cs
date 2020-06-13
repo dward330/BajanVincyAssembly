@@ -31,6 +31,7 @@ namespace BajanVincyAssembly.Services.Compilers
         {
             Instruction.InstructionAddressPointer += 32;
             Instruction instruction = new Instruction(Instruction.InstructionAddressPointer);
+            instruction.AssemblyStatement = lineOfCode;
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -319,7 +320,7 @@ namespace BajanVincyAssembly.Services.Compilers
                     {
                         RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
                         WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.EX,
-                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.EX
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.ID
                     };
                     break;
                 case BVOperation.MIPSSUB:
@@ -336,7 +337,7 @@ namespace BajanVincyAssembly.Services.Compilers
                     {
                         RegisterNames = new List<string>() { instruction.OperandARegister, instruction.OperandBRegister },
                         WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.EX,
-                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.EX
+                        WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.ID
                     };
                     break;
                 case BVOperation.MIPSLW:

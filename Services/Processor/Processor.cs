@@ -199,7 +199,7 @@ namespace BajanVincyAssembly.Services.Processor
         /// <summary>
         /// Returns the current processor pipeline state
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Dictionary of Processor Intruction State</returns>
         public Dictionary<int, InstructionPipelineState> GetProcessorPipelineState()
         {
             return this._ProcessorPipelineState.DeepClone();

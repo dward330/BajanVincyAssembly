@@ -39,6 +39,7 @@ namespace BajanVincyAssembly
             this.Reset();
 
             this.ListViewOfRegisters.ItemsSource = this.Registers;
+            this.ListViewOfTimingDiagram.ItemsSource = this.InstructionTimingDiagrams;
         }
 
         /// <summary>
@@ -70,6 +71,11 @@ namespace BajanVincyAssembly
         /// Ouput Messages
         /// </summary>
         public ObservableCollection<string> OuputMessages = new ObservableCollection<string>();
+
+        /// <summary>
+        /// Instruction Timing Diagrams
+        /// </summary>
+        public ObservableCollection<InstructionTimingDiagram> InstructionTimingDiagrams = new ObservableCollection<InstructionTimingDiagram>();
 
         /// <summary>
         /// Compiles BV Assembly Code
@@ -278,6 +284,22 @@ namespace BajanVincyAssembly
             if (this.ProcessorInstructions.Any())
             {
                 this._Processor.GenerateTimingAnalysisForInstructions();
+                var processorState = this._Processor.GetProcessorPipelineState();
+
+                // Jump onto Main UI Thread
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    this.TextBlock_TimingDiagramHeader.Text = "With Hardware Forwarding:";
+                    this.InstructionTimingDiagrams.Clear();
+                    foreach (var instructionState in processorState)
+                    {
+                        this.InstructionTimingDiagrams.Add(new InstructionTimingDiagram()
+                        {
+                            AssemblyStatement = instructionState.Value.Instruction.AssemblyStatement,
+                            TimingDiagram = instructionState.Value.ProcessingTimingDiagram
+                        });
+                    }
+                }));
             }
         }
 
@@ -293,7 +315,29 @@ namespace BajanVincyAssembly
             // Generate/Build Instructions
             IEnumerable<Instruction> compiledInstructions = this._BVCompiler.Compile(rawCode, true);
             this._Processor = new Processor(compiledInstructions, true);
-            this._Processor.GenerateTimingAnalysisForInstructions();
+
+            this.UpdateLatestSnapshotOfProcessorInstructions();
+
+            if (this.ProcessorInstructions.Any())
+            {
+                this._Processor.GenerateTimingAnalysisForInstructions();
+                var processorState = this._Processor.GetProcessorPipelineState();
+
+                // Jump onto Main UI Thread
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    this.TextBlock_TimingDiagramHeader.Text = "With Hardware Forwarding:";
+                    this.InstructionTimingDiagrams.Clear();
+                    foreach (var instructionState in processorState)
+                    {
+                        this.InstructionTimingDiagrams.Add(new InstructionTimingDiagram()
+                        {
+                            AssemblyStatement = instructionState.Value.Instruction.AssemblyStatement,
+                            TimingDiagram = instructionState.Value.ProcessingTimingDiagram
+                        });
+                    }
+                }));
+            }
         }
 
         /// <summary>

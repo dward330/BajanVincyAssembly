@@ -45,5 +45,11 @@ namespace BajanVincyAssembly.Services.Processor
         /// Generates Complete Timing Diagram for all Instructions
         /// </summary>
         void GenerateTimingAnalysisForInstructions();
+
+        /// <summary>
+        /// Returns the current processor pipeline state
+        /// </summary>
+        /// <returns>Dictionary of Processor Intruction State</returns>
+        Dictionary<int, InstructionPipelineState> GetProcessorPipelineState();
     }
 }

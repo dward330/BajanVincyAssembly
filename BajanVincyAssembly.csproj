@@ -87,6 +87,7 @@
     <Compile Include="Models\ComputerArchitecture\DataDependencyHazardForOthers.cs" />
     <Compile Include="Models\ComputerArchitecture\DataDependencyNeedIHave.cs" />
     <Compile Include="Models\ComputerArchitecture\Instruction.cs" />
+    <Compile Include="Models\ComputerArchitecture\InstructionTimingDiagram.cs" />
     <Compile Include="Models\ObjectExtensions.cs" />
     <Compile Include="Services\Compilers\BVInstructionBuilder.cs" />
     <Compile Include="Services\Compilers\BVOperationValidationChecks.cs" />

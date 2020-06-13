@@ -78,6 +78,11 @@ namespace BajanVincyAssembly.Models.ComputerArchitecture
         public string JumpLabel { get; set; }
 
         /// <summary>
+        /// Gets or sets Assembly statement
+        /// </summary>
+        public string AssemblyStatement { get; set; }
+
+        /// <summary>
         /// Data Dependency Hazard other instructions can have on this instruction
         /// </summary>
         public DataDependencyHazardForOthers DataDependencyHazardForOthers { get; set; } = new DataDependencyHazardForOthers();

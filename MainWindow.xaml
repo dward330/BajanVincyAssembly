@@ -76,6 +76,21 @@
                     </ScrollViewer>
                 </GroupBox>
             </TabItem>
+            <TabItem Header="Timing Diagram">
+                <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Header="" Margin="10,10,10,10" BorderBrush="Black">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Name="TextBlock_TimingDiagramHeader" Background="White" Foreground="DarkGreen" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,5,5,5" Padding="5,5,5,5"></TextBlock>
+                        <ListView x:Name="ListViewOfTimingDiagram" Margin="5">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Instruction / Assembly:" Width="Auto" DisplayMemberBinding="{Binding AssemblyStatement}"/>
+                                    <GridViewColumn Header="TimingDiagram" Width="Auto" DisplayMemberBinding="{Binding TimingDiagram}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>
