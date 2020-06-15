@@ -367,12 +367,7 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = secondOperationPart_.Substring(indexOfFirstParenthesis_ + 1, (indexOfSecondParenthesis_ - indexOfFirstParenthesis_ - 1)).Trim();
                     instruction.OperandImmediate = int.Parse(secondOperationPart_.Substring(0, indexOfFirstParenthesis_).Trim());
-                    instruction.DataDependencyHazardForOthers = new DataDependencyHazardForOthers()
-                    {
-                        RegisterName = instruction.DestinationRegister,
-                        StageAvailibity_NoForwarding = PipelineStage.MEM,
-                        StageAvailibity_WithForwarding = PipelineStage.MEM
-                    };
+                    instruction.DataDependencyHazardForOthers = new DataDependencyHazardForOthers();
                     instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
                     {
                         RegisterNames = new List<string>() { instruction.DestinationRegister },
