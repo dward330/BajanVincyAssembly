@@ -370,7 +370,7 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DataDependencyHazardForOthers = new DataDependencyHazardForOthers();
                     instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
                     {
-                        RegisterNames = new List<string>() { instruction.DestinationRegister },
+                        RegisterNames = new List<string>() { instruction.DestinationRegister, instruction.OperandARegister },
                         WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
                         WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.MEM
                     };
