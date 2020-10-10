@@ -169,41 +169,41 @@ namespace BajanVincyAssembly.Services.Compilers
                     case BVOperation.COPYERASE:
                         lineOfCode_ValidationInfo = this.RunCopyEraseInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.LESSTHEN:
-                        lineOfCode_ValidationInfo = this.RunLessThenInstructionValidationCheck(lineOfCode);
+                    case BVOperation.LESSTHAN:
+                        lineOfCode_ValidationInfo = this.RunLessThanInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.LESSTHENPOS:
-                        lineOfCode_ValidationInfo = this.RunLessThenPosInstructionValidationCheck(lineOfCode);
+                    case BVOperation.LESSTHANPOS:
+                        lineOfCode_ValidationInfo = this.RunLessThanPosInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.LESSTHENCONST:
-                        lineOfCode_ValidationInfo = this.RunLessThenConstInstructionValidationCheck(lineOfCode);
+                    case BVOperation.LESSTHANCONST:
+                        lineOfCode_ValidationInfo = this.RunLessThanConstInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.LESSTHENEQ:
-                        lineOfCode_ValidationInfo = this.RunLessThenEqInstructionValidationCheck(lineOfCode);
+                    case BVOperation.LESSTHANEQ:
+                        lineOfCode_ValidationInfo = this.RunLessThanEqInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.LESSTHENEQPOS:
-                        lineOfCode_ValidationInfo = this.RunLessThenEqPosInstructionValidationCheck(lineOfCode);
+                    case BVOperation.LESSTHANEQPOS:
+                        lineOfCode_ValidationInfo = this.RunLessThanEqPosInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.LESSTHENEQCONST:
-                        lineOfCode_ValidationInfo = this.RunLessThenEqConstInstructionValidationCheck(lineOfCode);
+                    case BVOperation.LESSTHANEQCONST:
+                        lineOfCode_ValidationInfo = this.RunLessThanEqConstInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.MORETHEN:
-                        lineOfCode_ValidationInfo = this.RunMoreThenInstructionValidationCheck(lineOfCode);
+                    case BVOperation.MORETHAN:
+                        lineOfCode_ValidationInfo = this.RunMoreThanInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.MORETHENPOS:
-                        lineOfCode_ValidationInfo = this.RunMoreThenPosInstructionValidationCheck(lineOfCode);
+                    case BVOperation.MORETHANPOS:
+                        lineOfCode_ValidationInfo = this.RunMoreThanPosInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.MORETHENCONST:
-                        lineOfCode_ValidationInfo = this.RunMoreThenConstInstructionValidationCheck(lineOfCode);
+                    case BVOperation.MORETHANCONST:
+                        lineOfCode_ValidationInfo = this.RunMoreThanConstInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.MORETHENEQ:
-                        lineOfCode_ValidationInfo = this.RunMoreThenEqInstructionValidationCheck(lineOfCode);
+                    case BVOperation.MORETHANEQ:
+                        lineOfCode_ValidationInfo = this.RunMoreThanEqInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.MORETHENEQPOS:
-                        lineOfCode_ValidationInfo = this.RunMoreThenEqPosInstructionValidationCheck(lineOfCode);
+                    case BVOperation.MORETHANEQPOS:
+                        lineOfCode_ValidationInfo = this.RunMoreThanEqPosInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.MORETHENEQCONST:
-                        lineOfCode_ValidationInfo = this.RunMoreThenEqConstInstructionValidationCheck(lineOfCode);
+                    case BVOperation.MORETHANEQCONST:
+                        lineOfCode_ValidationInfo = this.RunMoreThanEqConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.XOR:
                         lineOfCode_ValidationInfo = this.RunXORInstructionValidationCheck(lineOfCode);
@@ -235,17 +235,17 @@ namespace BajanVincyAssembly.Services.Compilers
                     case BVOperation.GOTONOEQCONST:
                         lineOfCode_ValidationInfo = this.RunGoToNoEqConstInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.GOTOMORETHEN:
-                        lineOfCode_ValidationInfo = this.RunGoToMoreThenInstructionValidationCheck(lineOfCode);
+                    case BVOperation.GOTOMORETHAN:
+                        lineOfCode_ValidationInfo = this.RunGoToMoreThanInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.GOTOMORETHENCONST:
-                        lineOfCode_ValidationInfo = this.RunGoToMoreThenConstInstructionValidationCheck(lineOfCode);
+                    case BVOperation.GOTOMORETHANCONST:
+                        lineOfCode_ValidationInfo = this.RunGoToMoreThanConstInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.GOTOLESSTHEN:
-                        lineOfCode_ValidationInfo = this.RunGoToLessThenInstructionValidationCheck(lineOfCode);
+                    case BVOperation.GOTOLESSTHAN:
+                        lineOfCode_ValidationInfo = this.RunGoToLessThanInstructionValidationCheck(lineOfCode);
                         break;
-                    case BVOperation.GOTOLESSTHENCONST:
-                        lineOfCode_ValidationInfo = this.RunGoToLessThenConstInstructionValidationCheck(lineOfCode);
+                    case BVOperation.GOTOLESSTHANCONST:
+                        lineOfCode_ValidationInfo = this.RunGoToLessThanConstInstructionValidationCheck(lineOfCode);
                         break;
                     case BVOperation.JUMPLABEL:
                         lineOfCode_ValidationInfo = this.RunGoToJumpLabelInstructionValidationCheck(lineOfCode);
@@ -1503,14 +1503,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for Lessthen
+        /// Runs Instruction Validation Check for Lessthan
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunLessThanInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "lessthen";
+            const string operationName = "lessthan";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1544,14 +1544,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for LessthenPos
+        /// Runs Instruction Validation Check for LessthanPos
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenPosInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunLessThanPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "lessthenpos";
+            const string operationName = "lessthanpos";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1585,14 +1585,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for LessthenConst
+        /// Runs Instruction Validation Check for LessthanConst
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenConstInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunLessThanConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "lessthenconst";
+            const string operationName = "lessthanconst";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1634,14 +1634,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for LessthenEq
+        /// Runs Instruction Validation Check for LessthanEq
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenEqInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunLessThanEqInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "lesstheneq";
+            const string operationName = "lessthaneq";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1675,14 +1675,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for LessthenEqPos
+        /// Runs Instruction Validation Check for LessthanEqPos
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenEqPosInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunLessThanEqPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "lesstheneqpos";
+            const string operationName = "lessthaneqpos";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1716,14 +1716,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for LessthenEqConst
+        /// Runs Instruction Validation Check for LessthanEqConst
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunLessThenEqConstInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunLessThanEqConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "lesstheneqconst";
+            const string operationName = "lessthaneqconst";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1765,14 +1765,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for Morethen
+        /// Runs Instruction Validation Check for Morethan
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunMoreThanInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "morethen";
+            const string operationName = "morethan";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1806,14 +1806,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for MoreThenPos
+        /// Runs Instruction Validation Check for MoreThanPos
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenPosInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunMoreThanPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "morethenpos";
+            const string operationName = "morethanpos";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1847,14 +1847,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for MoreThenConst
+        /// Runs Instruction Validation Check for MoreThanConst
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenConstInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunMoreThanConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "morethenconst";
+            const string operationName = "morethanconst";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1896,14 +1896,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for MoreThenEq
+        /// Runs Instruction Validation Check for MoreThanEq
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenEqInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunMoreThanEqInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "moretheneq";
+            const string operationName = "morethaneq";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1937,14 +1937,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for MoreThenEqPos
+        /// Runs Instruction Validation Check for MoreThanEqPos
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenEqPosInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunMoreThanEqPosInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "moretheneqpos";
+            const string operationName = "morethaneqpos";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -1978,14 +1978,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for MoreThenEqConst
+        /// Runs Instruction Validation Check for MoreThanEqConst
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunMoreThenEqConstInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunMoreThanEqConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "moretheneqconst";
+            const string operationName = "morethaneqconst";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -2493,14 +2493,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for GoToMorethen
+        /// Runs Instruction Validation Check for GoToMorethan
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToMoreThenInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunGoToMoreThanInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "gotomorethen";
+            const string operationName = "gotomorethan";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -2534,14 +2534,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for GoToMoreThenConst
+        /// Runs Instruction Validation Check for GoToMoreThanConst
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToMoreThenConstInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunGoToMoreThanConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "gotomorethenconst";
+            const string operationName = "gotomorethanconst";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -2583,14 +2583,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for GoToLessthen
+        /// Runs Instruction Validation Check for GoToLessthan
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToLessThenInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunGoToLessThanInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "gotolessthen";
+            const string operationName = "gotolessthan";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -2624,14 +2624,14 @@ namespace BajanVincyAssembly.Services.Compilers
         }
 
         /// <summary>
-        /// Runs Instruction Validation Check for GoToLessThenConst
+        /// Runs Instruction Validation Check for GoToLessThanConst
         /// </summary>
         /// <param name="lineOfCode">line of code to validate</param>
         /// <returns>Validation Info</returns>
-        private ValidationInfo RunGoToLessThenConstInstructionValidationCheck(string lineOfCode)
+        private ValidationInfo RunGoToLessThanConstInstructionValidationCheck(string lineOfCode)
         {
             ValidationInfo validationInfo = new ValidationInfo();
-            const string operationName = "gotolessthenconst";
+            const string operationName = "gotolessthanconst";
 
             string[] operationPartsSplitter = { " " };
             var operationParts = lineOfCode.Split(operationPartsSplitter, StringSplitOptions.RemoveEmptyEntries);

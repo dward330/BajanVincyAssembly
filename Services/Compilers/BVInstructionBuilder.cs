@@ -175,62 +175,62 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     break;
-                case BVOperation.LESSTHEN:
+                case BVOperation.LESSTHAN:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.LESSTHENPOS:
+                case BVOperation.LESSTHANPOS:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.LESSTHENCONST:
+                case BVOperation.LESSTHANCONST:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
                     break;
-                case BVOperation.LESSTHENEQ:
+                case BVOperation.LESSTHANEQ:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.LESSTHENEQPOS:
+                case BVOperation.LESSTHANEQPOS:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.LESSTHENEQCONST:
+                case BVOperation.LESSTHANEQCONST:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
                     break;
-                case BVOperation.MORETHEN:
+                case BVOperation.MORETHAN:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.MORETHENPOS:
+                case BVOperation.MORETHANPOS:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.MORETHENCONST:
+                case BVOperation.MORETHANCONST:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
                     break;
-                case BVOperation.MORETHENEQ:
+                case BVOperation.MORETHANEQ:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.MORETHENEQPOS:
+                case BVOperation.MORETHANEQPOS:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.MORETHENEQCONST:
+                case BVOperation.MORETHANEQCONST:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
@@ -283,22 +283,22 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
                     break;
-                case BVOperation.GOTOMORETHEN:
+                case BVOperation.GOTOMORETHAN:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.GOTOMORETHENCONST:
+                case BVOperation.GOTOMORETHANCONST:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
                     break;
-                case BVOperation.GOTOLESSTHEN:
+                case BVOperation.GOTOLESSTHAN:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandBRegister = operationParts[3].Replace(",", "").Trim();
                     break;
-                case BVOperation.GOTOLESSTHENCONST:
+                case BVOperation.GOTOLESSTHANCONST:
                     instruction.DestinationRegister = operationParts[1].Replace(",", "").Trim();
                     instruction.OperandARegister = operationParts[2].Replace(",", "").Trim();
                     instruction.OperandImmediate = int.Parse(operationParts[3]);
@@ -370,7 +370,7 @@ namespace BajanVincyAssembly.Services.Compilers
                     instruction.DataDependencyHazardForOthers = new DataDependencyHazardForOthers();
                     instruction.DataDependencyNeedsIHave = new DataDependencyNeedIHave()
                     {
-                        RegisterNames = new List<string>() { instruction.DestinationRegister },
+                        RegisterNames = new List<string>() { instruction.DestinationRegister, instruction.OperandARegister },
                         WhatStageINeedMyDependencyNeedsMet_NoForwarding = PipelineStage.ID,
                         WhatStageINeedMyDependencyNeedsMet_WithForwarding = PipelineStage.MEM
                     };

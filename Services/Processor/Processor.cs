@@ -383,84 +383,84 @@ namespace BajanVincyAssembly.Services.Processor
                     operandARegister.Base10Value = 0;
                     this._Registry.SaveRegister(operandARegister);
                     break;
-                case BVOperation.LESSTHEN:
+                case BVOperation.LESSTHAN:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
                     destinationRegister.Base10Value = operandARegister.Base10Value < operandBRegister.Base10Value ? 1: 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.LESSTHENPOS:
+                case BVOperation.LESSTHANPOS:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
                     destinationRegister.Base10Value = operandARegister.Base10Value < operandBRegister.Base10Value ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.LESSTHENCONST:
+                case BVOperation.LESSTHANCONST:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandIntermediate = instruction.OperandImmediate;
                     destinationRegister.Base10Value = operandARegister.Base10Value < operandIntermediate ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.LESSTHENEQ:
+                case BVOperation.LESSTHANEQ:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
                     destinationRegister.Base10Value = operandARegister.Base10Value <= operandBRegister.Base10Value ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.LESSTHENEQPOS:
+                case BVOperation.LESSTHANEQPOS:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
                     destinationRegister.Base10Value = operandARegister.Base10Value <= operandBRegister.Base10Value ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.LESSTHENEQCONST:
+                case BVOperation.LESSTHANEQCONST:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandIntermediate = instruction.OperandImmediate;
                     destinationRegister.Base10Value = operandARegister.Base10Value <= operandIntermediate ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.MORETHEN:
+                case BVOperation.MORETHAN:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
                     destinationRegister.Base10Value = operandARegister.Base10Value > operandBRegister.Base10Value ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.MORETHENPOS:
+                case BVOperation.MORETHANPOS:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
                     destinationRegister.Base10Value = operandARegister.Base10Value > operandBRegister.Base10Value ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.MORETHENCONST:
+                case BVOperation.MORETHANCONST:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandIntermediate = instruction.OperandImmediate;
                     destinationRegister.Base10Value = operandARegister.Base10Value > operandIntermediate ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.MORETHENEQ:
+                case BVOperation.MORETHANEQ:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
                     destinationRegister.Base10Value = operandARegister.Base10Value >= operandBRegister.Base10Value ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.MORETHENEQPOS:
+                case BVOperation.MORETHANEQPOS:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
                     destinationRegister.Base10Value = operandARegister.Base10Value >= operandBRegister.Base10Value ? 1 : 0;
                     this._Registry.SaveRegister(destinationRegister);
                     break;
-                case BVOperation.MORETHENEQCONST:
+                case BVOperation.MORETHANEQCONST:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandIntermediate = instruction.OperandImmediate;
@@ -546,7 +546,7 @@ namespace BajanVincyAssembly.Services.Processor
                         this._ProgramInstructionPointer = instructionCounter + 1;
                     }
                     break;
-                case BVOperation.GOTOMORETHEN:
+                case BVOperation.GOTOMORETHAN:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
@@ -556,7 +556,7 @@ namespace BajanVincyAssembly.Services.Processor
                         this._ProgramInstructionPointer = instructionCounter + 1;
                     }
                     break;
-                case BVOperation.GOTOMORETHENCONST:
+                case BVOperation.GOTOMORETHANCONST:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandIntermediate = instruction.OperandImmediate;
@@ -566,7 +566,7 @@ namespace BajanVincyAssembly.Services.Processor
                         this._ProgramInstructionPointer = instructionCounter + 1;
                     }
                     break;
-                case BVOperation.GOTOLESSTHEN:
+                case BVOperation.GOTOLESSTHAN:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandBRegister = this._Registry.GetRegister(instruction.OperandBRegister);
@@ -576,7 +576,7 @@ namespace BajanVincyAssembly.Services.Processor
                         this._ProgramInstructionPointer = instructionCounter + 1;
                     }
                     break;
-                case BVOperation.GOTOLESSTHENCONST:
+                case BVOperation.GOTOLESSTHANCONST:
                     destinationRegister = this._Registry.GetRegister(instruction.DestinationRegister);
                     operandARegister = this._Registry.GetRegister(instruction.OperandARegister);
                     operandIntermediate = instruction.OperandImmediate;
@@ -596,10 +596,10 @@ namespace BajanVincyAssembly.Services.Processor
                 case BVOperation.GOTOEQCONST:
                 case BVOperation.GOTONOEQ:
                 case BVOperation.GOTONOEQCONST:
-                case BVOperation.GOTOMORETHEN:
-                case BVOperation.GOTOMORETHENCONST:
-                case BVOperation.GOTOLESSTHEN:
-                case BVOperation.GOTOLESSTHENCONST:
+                case BVOperation.GOTOMORETHAN:
+                case BVOperation.GOTOMORETHANCONST:
+                case BVOperation.GOTOLESSTHAN:
+                case BVOperation.GOTOLESSTHANCONST:
                     break;
                 default:
                     this._ProgramInstructionPointer++;
